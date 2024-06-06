@@ -53,9 +53,14 @@ export const {
       }
 
       const existingUser = await getUserById(user.id);
-      if (!existingUser || !existingUser?.emailVerified) {
-        // prevent sign in without email verifciation
-        console.log("User not found or email not verified");
+      if (!existingUser) {
+        console.log("User not found");
+        return false;
+      }
+
+      // prevent sign in without email verifciation
+      if (!existingUser?.emailVerified) {
+        console.log(`User email not verified for ${existingUser?.email}`);
         return false;
       }
 

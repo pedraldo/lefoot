@@ -31,7 +31,8 @@ export default function RegisterForm() {
     defaultValues: {
       email: "",
       password: "",
-      name: "",
+      firstname: "",
+      lastname: "",
     },
   });
 
@@ -58,10 +59,27 @@ export default function RegisterForm() {
           <div className="space-y-4">
             <FormField
               control={form.control}
-              name="name"
+              name="firstname"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={isPending}
+                      placeholder="John Doe"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last Name</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
