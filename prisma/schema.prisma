@@ -58,43 +58,41 @@ enum UserRole {
 }
 
 model User {
-  id            String         @id @default(cuid())
+  id            String    @id @default(cuid())
   firstname     String
   lastname      String
   username      String
-  email         String?        @unique
+  email         String?   @unique
   emailVerified DateTime?
   image         String?
   password      String?
-  role          UserRole       @default(USER)
+  isInvitee     Boolean   @default(false)
+  role          UserRole  @default(USER)
   accounts      Account[]
-  teams         UsersOnTeams[]
+  teams         Team[]
 }
 
 model Team {
-  id             String         @id @default(cuid())
-  fixture_team_A Fixture?       @relation("team_A_fixture")
-  fixture_team_B Fixture?       @relation("team_B_fixture")
-  users          UsersOnTeams[]
-}
+  id    String @id @default(cuid())
+  users User[]
 
-model UsersOnTeams {
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
-  team   Team   @relation(fields: [teamId], references: [id])
-  teamId String
+  // fixture   Fixture? @relation(fields: [fixtureId], references: [id])
+  // fixtureId String?
 
-  @@id([userId, teamId])
+  homeFixtures Fixture[] @relation("HomeTeamFixture")
+  awayFixtures Fixture[] @relation("AwayTeamFixutre")
 }
 
 model Fixture {
-  id           String   @id @default(cuid())
-  date_time    DateTime
-  team_A_score Int
-  team_B_score Int
-  team_A_id    String   @unique
-  team_B_id    String   @unique
+  id         String   @id @default(cuid())
+  datetime   DateTime
+  homeScore  Int
+  awayScore  Int
+  homeTeamId String   @unique
+  awayTeamId String   @unique
 
-  team_A Team @relation("team_A_fixture", fields: [team_A_id], references: [id])
-  team_B Team @relation("team_B_fixture", fields: [team_B_id], references: [id])
+  homeTeam Team @relation("HomeTeamFixture", fields: [homeTeamId], references: [id], onDelete: Cascade)
+  awayTeam Team @relation("AwayTeamFixutre", fields: [awayTeamId], references: [id], onDelete: Cascade)
+
+  // Team Team[]
 }

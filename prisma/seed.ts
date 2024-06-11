@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { Prisma, PrismaClient } from "@prisma/client";
+import { create } from "domain";
 
 const prisma = new PrismaClient();
 
@@ -26,72 +27,56 @@ const main = async () => {
     users.push(dbUser);
   }
 
-  let _users = [...users];
-  let evenTeamUsers = [];
-  let oddTeamUsers = [];
-  const teams = [];
-  for (let i = 0; i < NB_FIXTURES * 2; i++) {
-    const team = {} satisfies Prisma.TeamCreateInput;
-    const dbTeam = await prisma.team.create({
-      data: team,
-    });
-    teams.push(dbTeam);
-
-    if (i % 2 === 0) {
-      for (let j = 0; j < 5; j++) {
-        const randomIndex = Math.floor(Math.random() * _users.length);
-        const randomUser = _users[randomIndex];
-        evenTeamUsers.push(randomUser);
-        _users.splice(randomIndex, 1);
-      }
-      await prisma.usersOnTeams.createMany({
-        data: evenTeamUsers.map((user) => ({
-          userId: user.id,
-          teamId: dbTeam.id,
-        })),
-      });
-      evenTeamUsers = [];
-    } else {
-      for (let j = 0; j < 5; j++) {
-        const randomIndex = Math.floor(Math.random() * _users.length);
-        const randomUser = _users[randomIndex];
-        oddTeamUsers.push(randomUser);
-        _users.splice(randomIndex, 1);
-      }
-      await prisma.usersOnTeams.createMany({
-        data: oddTeamUsers.map((user) => ({
-          userId: user.id,
-          teamId: dbTeam.id,
-        })),
-      });
-      oddTeamUsers = [];
-
-      _users = [...users];
-    }
-  }
-
   const fixtures = [];
   for (let i = 0; i < NB_FIXTURES; i++) {
-    const fixture = {
-      date_time: faker.date.recent(),
-      team_A_score:
-        i === 0
-          ? 7
-          : faker.number.int({
-              min: 5,
-              max: 18,
-            }),
-      team_B_score:
-        i === 0
-          ? 7
-          : faker.number.int({
-              min: 5,
-              max: 18,
-            }),
-      team_A_id: teams[i * 2].id,
-      team_B_id: teams[i * 2 + 1].id,
-    } satisfies Prisma.FixtureUncheckedCreateInput;
-    const dbFixture = await prisma.fixture.create({ data: fixture });
+    let _users = [...users];
+    let homeUsers = [];
+    let awayUsers = [];
+
+    for (let j = 0; j < 5; j++) {
+      const randomIndex = Math.floor(Math.random() * _users.length);
+      homeUsers.push(_users[randomIndex]);
+      _users.splice(randomIndex, 1);
+    }
+    for (let j = 0; j < 5; j++) {
+      const randomIndex = Math.floor(Math.random() * _users.length);
+      awayUsers.push(_users[randomIndex]);
+      _users.splice(randomIndex, 1);
+    }
+
+    const dbFixture = await prisma.fixture.create({
+      data: {
+        datetime: faker.date.recent(),
+        homeScore:
+          i === 0
+            ? 7
+            : faker.number.int({
+                min: 5,
+                max: 18,
+              }),
+        awayScore:
+          i === 0
+            ? 7
+            : faker.number.int({
+                min: 5,
+                max: 18,
+              }),
+        homeTeam: {
+          create: {
+            users: {
+              connect: homeUsers.map((user) => ({ id: user.id })),
+            },
+          },
+        },
+        awayTeam: {
+          create: {
+            users: {
+              connect: awayUsers.map((user) => ({ id: user.id })),
+            },
+          },
+        },
+      },
+    });
     fixtures.push(dbFixture);
   }
 };
