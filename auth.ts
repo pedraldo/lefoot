@@ -4,7 +4,7 @@ import NextAuth from "next-auth";
 
 import authConfig from "@/auth.config";
 import { UserRole } from "@prisma/client";
-import { getUserById } from "./data/user";
+import { getUserById } from "./queries/user";
 
 declare module "next-auth" {
   interface User {

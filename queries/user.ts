@@ -22,6 +22,42 @@ export const getAllUsers = async () => {
   });
 };
 
+export const getPlayersUsers = async () => {
+  return prisma.user.findMany({
+    select: {
+      id: true,
+      username: true,
+      image: true,
+      teams: {
+        select: {
+          id: true,
+          homeFixtures: {
+            select: {
+              id: true,
+              homeScore: true,
+              awayScore: true,
+            },
+          },
+          awayFixtures: {
+            select: {
+              id: true,
+              homeScore: true,
+              awayScore: true,
+            },
+          },
+        },
+      },
+    },
+    orderBy: {
+      username: "asc",
+    },
+  });
+};
+
+export type PlayerUser = Prisma.PromiseReturnType<
+  typeof getPlayersUsers
+>[number];
+
 export const getUserById = async (id: string) => {
   try {
     const user = await prisma.user.findUnique({

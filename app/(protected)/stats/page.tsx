@@ -1,4 +1,4 @@
-import { getUserFixtures } from "@/data/user";
+import { getUserFixtures } from "@/queries/user";
 
 const Stats = async () => {
   const jaylanFixtures = await getUserFixtures("clx4m8cvn0000x30g85srqv88");

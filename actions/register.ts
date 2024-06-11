@@ -1,9 +1,9 @@
 "use server";
 
-import { getUserByEmail } from "@/data/user";
 import { prisma } from "@/lib/db";
 import { sendVerificationEmail } from "@/lib/mail";
 import { generateVerificationToken } from "@/lib/tokens";
+import { getUserByEmail } from "@/queries/user";
 import { RegisterSchema } from "@/schemas";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
