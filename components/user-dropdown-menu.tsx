@@ -5,9 +5,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
 import { RiLogoutBoxRLine, RiSettings5Line, RiUser3Line } from "react-icons/ri";
-import { Button, buttonVariants } from "./ui/button";
+import { Button } from "./ui/button";
 
 export const UserDropdownMenu = () => {
   return (

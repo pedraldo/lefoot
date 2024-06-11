@@ -14,21 +14,27 @@ const Header = () => {
         <nav className="hidden md:flex items-center gap-6">
           <Link
             href="/stats"
-            className="inline-flex items-center gap-2 font-medium transition-colors hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-950 dark:hover:text-gray-50 dark:focus:ring-gray-300"
+            className={
+              "inline-flex items-center gap-2 font-medium transition-colors hover:text-gray-900 focus:outline-none focus:ring-0 dark:hover:text-gray-50"
+            }
             prefetch={false}
           >
             Stats
           </Link>
           <Link
             href="/fixtures"
-            className="inline-flex items-center gap-2 font-medium transition-colors hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-950 dark:hover:text-gray-50 dark:focus:ring-gray-300"
+            className={
+              "inline-flex items-center gap-2 font-medium transition-colors hover:text-gray-900 focus:outline-none focus:ring-0 dark:hover:text-gray-50-300"
+            }
             prefetch={false}
           >
             Matchs
           </Link>
           <Link
             href="/players"
-            className="inline-flex items-center gap-2 font-medium transition-colors hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-950 dark:hover:text-gray-50 dark:focus:ring-gray-300"
+            className={
+              "inline-flex items-center gap-2 font-medium transition-colors hover:text-gray-900 focus:outline-none focus:ring-0 dark:hover:text-gray-50-300"
+            }
             prefetch={false}
           >
             Joueurs

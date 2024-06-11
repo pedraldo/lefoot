@@ -7,7 +7,9 @@ const Footer = () => {
       <div className="container mx-auto flex h-16 items-center justify-around px-4">
         <Link
           href="/stats"
-          className="inline-flex flex-col items-center gap-1 font-medium transition-colors hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-950 dark:hover:text-gray-50 dark:focus:ring-gray-300"
+          className={
+            "inline-flex flex-col items-center gap-1 font-medium transition-colors hover:text-gray-900 focus:outline-none focus:ring-0 dark:hover:text-gray-50 "
+          }
           prefetch={false}
         >
           <RiBarChart2Line className="h-7 w-7" />
@@ -15,7 +17,9 @@ const Footer = () => {
         </Link>
         <Link
           href="/fixtures"
-          className="inline-flex flex-col items-center gap-1 font-medium transition-colors hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-950 dark:hover:text-gray-50 dark:focus:ring-gray-300"
+          className={
+            "inline-flex flex-col items-center gap-1 font-medium transition-colors hover:text-gray-900 focus:outline-none focus:ring-0 dark:hover:text-gray-50 "
+          }
           prefetch={false}
         >
           <RiFootballLine className="h-7 w-7" />
@@ -23,7 +27,9 @@ const Footer = () => {
         </Link>
         <Link
           href="/players"
-          className="inline-flex flex-col items-center gap-1 font-medium transition-colors hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-950 dark:hover:text-gray-50 dark:focus:ring-gray-300"
+          className={
+            "inline-flex flex-col items-center gap-1 font-medium transition-colors hover:text-gray-900 focus:outline-none focus:ring-0 dark:hover:text-gray-50 "
+          }
           prefetch={false}
         >
           <RiTeamLine className="h-7 w-7" />
