@@ -4,8 +4,8 @@ import { newVerification } from "@/actions/new-verification";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BeatLoader } from "react-spinners";
-import FormError from "../form-error";
-import FormSuccess from "../form-success";
+import FormError from "../form/form-error";
+import FormSuccess from "../form/form-success";
 import CardWrapper from "./card-wrapper";
 
 export const NewVerificationForm = () => {

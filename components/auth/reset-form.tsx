@@ -6,8 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import FormError from "../form-error";
-import FormSuccess from "../form-success";
+import FormError from "../form/form-error";
+import FormSuccess from "../form/form-success";
 import { Button } from "../ui/button";
 import {
   Form,
