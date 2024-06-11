@@ -118,7 +118,7 @@ export const FixtureForm = ({ users, onSubmit }: FixtureFormProps) => {
               type="button"
               variant={"outline"}
               onClick={() => {
-                const userId = row.getValue<string>("id");
+                const userId = row.original.id;
                 const user = users.find((u) => u.id === userId);
                 if (user) {
                   addHomeUser(user);
@@ -132,7 +132,7 @@ export const FixtureForm = ({ users, onSubmit }: FixtureFormProps) => {
               type="button"
               variant={"outline"}
               onClick={() => {
-                const userId = row.getValue<string>("id");
+                const userId = row.original.id;
                 const user = users.find((u) => u.id === userId);
 
                 if (user) {

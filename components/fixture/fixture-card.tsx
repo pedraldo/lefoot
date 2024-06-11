@@ -1,6 +1,6 @@
 "use client";
 
-import { FixtureWithTeams } from "@/data/fixture";
+import { FixtureWithTeams } from "@/queries/fixture";
 import { format } from "date-fns";
 import { useState } from "react";
 import { RiArrowDownWideFill } from "react-icons/ri";
@@ -20,10 +20,10 @@ const FixtureCard = ({ fixture }: { fixture: FixtureWithTeams }) => {
     <>
       <Card>
         <CardHeader
-          className="cursor-pointer"
+          className="cursor-pointer pb-0"
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          <CardTitle>
+          <CardTitle className="pb-0">
             <div className="flex justify-between items-center">
               <span className="font-bold text-primary">Equipe A</span>
               <div>
@@ -57,7 +57,7 @@ const FixtureCard = ({ fixture }: { fixture: FixtureWithTeams }) => {
           </CardDescription>
         </CardHeader>
         <CardContent
-          className={`transition-all duration-300 ease ${
+          className={`pb-0 transition-all duration-300 ease ${
             isExpanded ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
           }`}
         >
@@ -76,7 +76,7 @@ const FixtureCard = ({ fixture }: { fixture: FixtureWithTeams }) => {
             </div>
           )}
         </CardContent>
-        <CardFooter className="justify-center">
+        <CardFooter className="justify-center pb-0">
           <Button
             variant="ghost"
             size="icon"
