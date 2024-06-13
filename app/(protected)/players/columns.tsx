@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { formatNumberToPercent } from "@/lib/utils";
 import { PlayerUserData } from "@/services/user";
 import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 import { LuArrowUpDown } from "react-icons/lu";
 
 export const columns: ColumnDef<PlayerUserData>[] = [
@@ -25,15 +26,17 @@ export const columns: ColumnDef<PlayerUserData>[] = [
       const image = row.original.image;
       const username = row.original.username;
       return (
-        <div className="flex items-center gap-2 [@media(width<=480px)]:flex-col">
-          <Avatar size="default">
-            {image ? <AvatarImage src={image} alt={username ?? ""} /> : null}
-            <AvatarFallback>
-              {username.slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <span className="text-center">{username}</span>
-        </div>
+        <Link href={`/players/${row.original.id}`} prefetch={false}>
+          <div className="flex items-center gap-2 [@media(width<=480px)]:flex-col">
+            <Avatar size="default">
+              {image ? <AvatarImage src={image} alt={username ?? ""} /> : null}
+              <AvatarFallback>
+                {username.slice(0, 2).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <span className="text-center">{username}</span>
+          </div>
+        </Link>
       );
     },
   },
