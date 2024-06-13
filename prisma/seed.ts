@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
 import { Prisma, PrismaClient } from "@prisma/client";
-import { create } from "domain";
 
 const prisma = new PrismaClient();
 
@@ -44,9 +43,10 @@ const main = async () => {
       _users.splice(randomIndex, 1);
     }
 
+    const datetime = faker.date.recent();
     const dbFixture = await prisma.fixture.create({
       data: {
-        datetime: faker.date.recent(),
+        datetime,
         homeScore:
           i === 0
             ? 7
@@ -66,6 +66,7 @@ const main = async () => {
             users: {
               connect: homeUsers.map((user) => ({ id: user.id })),
             },
+            creationDate: datetime,
           },
         },
         awayTeam: {
@@ -73,6 +74,7 @@ const main = async () => {
             users: {
               connect: awayUsers.map((user) => ({ id: user.id })),
             },
+            creationDate: datetime,
           },
         },
       },

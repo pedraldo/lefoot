@@ -113,7 +113,7 @@ export const columns: ColumnDef<PlayerUserData>[] = [
     cell: ({ row }) => {
       return (
         <div className="w-full text-center">
-          {formatNumberToPercent(row.original.percentFixturesWon)}
+          {formatNumberToPercent(row.original.percentFixturesWon) + "%"}
         </div>
       );
     },
@@ -135,7 +135,7 @@ export const columns: ColumnDef<PlayerUserData>[] = [
     cell: ({ row }) => {
       return (
         <div className="w-full text-center">
-          {formatNumberToPercent(row.original.percentFixturesLost)}
+          {formatNumberToPercent(row.original.percentFixturesLost) + "%"}
         </div>
       );
     },

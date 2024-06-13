@@ -73,8 +73,9 @@ model User {
 }
 
 model Team {
-  id    String @id @default(cuid())
-  users User[]
+  id           String   @id @default(cuid())
+  creationDate DateTime
+  users        User[]
 
   // fixture   Fixture? @relation(fields: [fixtureId], references: [id])
   // fixtureId String?

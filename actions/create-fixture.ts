@@ -1,7 +1,7 @@
 "use server";
 
-import { prisma } from "@/lib/db";
 import { FixtureFormValues } from "@/components/fixture/fixture-form";
+import { prisma } from "@/lib/db";
 
 export const createFixture = async (values: FixtureFormValues) => {
   const fixture = await prisma.fixture.create({
@@ -14,6 +14,7 @@ export const createFixture = async (values: FixtureFormValues) => {
           users: {
             connect: values.homeUserIds.map((id) => ({ id })),
           },
+          creationDate: values.matchDate,
         },
       },
       awayTeam: {
@@ -21,6 +22,7 @@ export const createFixture = async (values: FixtureFormValues) => {
           users: {
             connect: values.awayUserIds.map((id) => ({ id })),
           },
+          creationDate: values.matchDate,
         },
       },
     },

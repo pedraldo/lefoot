@@ -5,7 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatNumberToPercent(number: number): string {
-  const percent = +parseFloat(`${number * 100}`).toFixed(1);
-  return percent + `%`;
+export function formatNumberToPercent(number: number): number {
+  return +parseFloat(`${number * 100}`).toFixed(1);
 }

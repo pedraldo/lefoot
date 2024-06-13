@@ -99,6 +99,9 @@ export const getUserFixtures = async (userId: string) => {
               },
             },
           },
+          orderBy: {
+            creationDate: "asc",
+          },
         },
       },
     });

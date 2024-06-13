@@ -1,14 +1,14 @@
 "use client";
 
-import * as React from "react";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> & {
-    size: "default" | "sm" | "lg";
+    size: "default" | "sm" | "lg" | "xl";
   }
 >(({ className, size = "default", ...props }, ref) => (
   <AvatarPrimitive.Root
@@ -19,6 +19,7 @@ const Avatar = React.forwardRef<
         "h-8 w-8": size === "sm",
         "h-10 w-10": size === "default",
         "h-16 w-16": size === "lg",
+        "h-36 w-36": size === "xl",
       },
       className
     )}
@@ -54,4 +55,4 @@ const AvatarFallback = React.forwardRef<
 ));
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 
-export { Avatar, AvatarImage, AvatarFallback };
+export { Avatar, AvatarFallback, AvatarImage };
