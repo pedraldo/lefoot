@@ -17,7 +17,7 @@ export const NewVerificationForm = () => {
 
   const onSubmit = useCallback(() => {
     if (!token) {
-      setError("Missing token !");
+      setError("Lien de vérification expiré !");
       return;
     }
     newVerification(token)
@@ -26,7 +26,7 @@ export const NewVerificationForm = () => {
         setError(data.error);
       })
       .catch(() => {
-        setError("Something went wrong !");
+        setError("Une erreur s'est produite !");
       });
   }, [token]);
 
@@ -41,8 +41,8 @@ export const NewVerificationForm = () => {
 
   return (
     <CardWrapper
-      headerLabel="Confirm your verification"
-      backButtonLabel="Back to login"
+      headerLabel="Confirmation de votre adresse email"
+      backButtonLabel="Retour à la page de connexion"
       backButtonHref="/auth/login"
     >
       <div className="flex items-center w-full justify-center">

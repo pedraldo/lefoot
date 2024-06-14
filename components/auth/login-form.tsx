@@ -54,10 +54,9 @@ export default function LoginForm() {
 
   return (
     <CardWrapper
-      headerLabel="Welcome back"
-      backButtonLabel="Don't have an account?"
+      headerLabel="Bienvenue"
+      backButtonLabel="Pas encore de compte ?"
       backButtonHref="/auth/register"
-      showSocial
     >
       <Form form={form} onSubmit={onSubmit}>
         <div className="space-y-4">
@@ -84,7 +83,7 @@ export default function LoginForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Mot de passe</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -99,7 +98,7 @@ export default function LoginForm() {
                   size="sm"
                   asChild
                 >
-                  <Link href="/auth/reset">Forgot password?</Link>
+                  <Link href="/auth/reset">Mot de passe oublié ?</Link>
                 </Button>
                 <FormMessage />
               </FormItem>
@@ -109,7 +108,7 @@ export default function LoginForm() {
         <FormError message={error || urlError} />
         <FormSuccess message={success} />
         <Button type="submit" className="w-full" disabled={isPending}>
-          Login
+          Connexion
         </Button>
       </Form>
     </CardWrapper>

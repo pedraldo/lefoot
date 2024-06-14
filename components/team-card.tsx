@@ -32,11 +32,14 @@ const TeamCard = ({
             </span>
           </div>
         </CardTitle>
-        <CardDescription>{"Equipe d'au moins 4 joueurs"}</CardDescription>
+        <CardDescription>{"Equipe d'au moins 4 joueur·euse·s"}</CardDescription>
       </CardHeader>
       <CardContent>
         {users.map((user) => (
-          <div className="flex justify-between gap-1" key={user.id}>
+          <div
+            className="flex items-center justify-between gap-1"
+            key={user.id}
+          >
             <span className="flex-1">{user.username}</span>
             {!!removeUser && (
               <Button

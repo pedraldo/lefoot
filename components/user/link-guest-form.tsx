@@ -1,9 +1,19 @@
 "use client";
 
-import { register } from "@/actions/register";
-import { RegisterSchema } from "@/schemas";
+import { linkGuest } from "@/actions/link-guest";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { GuestUser } from "@/queries/user";
+import { LinkGuestSchema } from "@/schemas";
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { z } from "zod";
+import CardWrapper from "../auth/card-wrapper";
 import FormError from "../form/form-error";
 import FormSuccess from "../form/form-success";
 import { Button } from "../ui/button";
@@ -17,82 +27,76 @@ import {
   useZodForm,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import CardWrapper from "./card-wrapper";
-import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
 
-export default function RegisterForm() {
+const LinkGuestForm = ({ guestUsers }: { guestUsers: GuestUser[] }) => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
   const { toast } = useToast();
+  const router = useRouter();
   const form = useZodForm({
-    schema: RegisterSchema,
+    schema: LinkGuestSchema,
     defaultValues: {
+      guestId: "",
       email: "",
-      password: "",
-      firstname: "",
-      lastname: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
+  const onSubmit = (values: z.infer<typeof LinkGuestSchema>) => {
     setError("");
     setSuccess("");
 
     startTransition(async () => {
-      const { error, success } = await register(values);
+      const { error, success } = await linkGuest(values);
       setError(error);
       setSuccess(success);
 
       if (error) {
         toast({
           variant: "destructive",
-          title: "Erreur lors de la création de votre compte",
+          title:
+            "Erreur lors de la conversion du compte invité en compte classique",
         });
       }
 
       if (success) {
         toast({
-          title: "Votre compte a bien été créé",
+          title: "Email envoyé pour la configuration du mot de passe",
         });
-        router.push("/auth/login");
+        router.push("/players");
         router.refresh();
       }
     });
   };
 
   return (
-    <CardWrapper
-      headerLabel="Créer un compte"
-      backButtonLabel="J'ai déjà un compte"
-      backButtonHref="auth/login"
-    >
+    <CardWrapper headerLabel="Créer un compte pour un·e invité·e">
       <Form form={form} onSubmit={onSubmit} className="space-y-6">
         <div className="space-y-4">
           <FormField
             control={form.control}
-            name="firstname"
+            name="guestId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Prénom</FormLabel>
-                <FormControl>
-                  <Input {...field} disabled={isPending} placeholder="John" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastname"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nom</FormLabel>
-                <FormControl>
-                  <Input {...field} disabled={isPending} placeholder="Doe" />
-                </FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selectionner un·e invité·e" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {guestUsers.map((guestUser) => (
+                      <SelectItem key={guestUser.id} value={guestUser.id}>
+                        {guestUser.username}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -115,24 +119,6 @@ export default function RegisterForm() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Mot de passe</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    disabled={isPending}
-                    placeholder="******"
-                    type="password"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </div>
         <FormError message={error} />
         <FormSuccess message={success} />
@@ -142,4 +128,6 @@ export default function RegisterForm() {
       </Form>
     </CardWrapper>
   );
-}
+};
+
+export default LinkGuestForm;

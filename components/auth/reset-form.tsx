@@ -45,8 +45,8 @@ export default function ResetForm() {
 
   return (
     <CardWrapper
-      headerLabel="Forgot your password?"
-      backButtonLabel="Back to login"
+      headerLabel="Mot de passe oublié ?"
+      backButtonLabel="Retour à la page de connexion"
       backButtonHref="/auth/login"
     >
       <Form form={form} onSubmit={onSubmit} className="space-y-6">
@@ -73,7 +73,7 @@ export default function ResetForm() {
         <FormError message={error} />
         <FormSuccess message={success} />
         <Button type="submit" className="w-full" disabled={isPending}>
-          Send a reset email
+          Envoyer un mail
         </Button>
       </Form>
     </CardWrapper>

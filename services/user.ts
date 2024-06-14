@@ -5,6 +5,7 @@ export type PlayerUserData = {
   id: string;
   image: string | null;
   username: string;
+  isGuest: boolean;
   nbFixtures: number;
   nbFixturesWon: number;
   nbFixturesLost: number;
@@ -48,6 +49,7 @@ export const formatUsersForPlayersTable = (
       id: playerUser.id,
       image: playerUser.image,
       username: playerUser.username,
+      isGuest: playerUser.isGuest,
       nbFixtures: fixturesData.nbFixtures,
       nbFixturesWon: fixturesData.nbFixturesWon,
       nbFixturesLost: fixturesData.nbFixturesLost,

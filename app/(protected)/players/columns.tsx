@@ -7,6 +7,7 @@ import { PlayerUserData } from "@/services/user";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { LuArrowUpDown } from "react-icons/lu";
+import { RiUser3Line } from "react-icons/ri";
 
 export const columns: ColumnDef<PlayerUserData>[] = [
   {
@@ -25,13 +26,18 @@ export const columns: ColumnDef<PlayerUserData>[] = [
     cell: ({ row }) => {
       const image = row.original.image;
       const username = row.original.username;
+      const isGuest = row.original.isGuest;
       return (
         <Link href={`/players/${row.original.id}`} prefetch={false}>
           <div className="flex items-center gap-2 [@media(width<=480px)]:flex-col">
             <Avatar size="default">
               {image ? <AvatarImage src={image} alt={username ?? ""} /> : null}
               <AvatarFallback>
-                {username.slice(0, 2).toUpperCase()}
+                {isGuest ? (
+                  <RiUser3Line className="h-4 w-4" />
+                ) : (
+                  username.slice(0, 2).toUpperCase()
+                )}
               </AvatarFallback>
             </Avatar>
             <span className="text-center">{username}</span>

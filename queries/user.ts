@@ -14,6 +14,19 @@ export const getUserByEmail = async (email: string) => {
   }
 };
 
+export const getUserById = async (id: string) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    return user;
+  } catch (error) {
+    return null;
+  }
+};
+
 export const getAllUsers = async () => {
   return prisma.user.findMany({
     orderBy: {
@@ -28,6 +41,7 @@ export const getPlayersUsers = async () => {
       id: true,
       username: true,
       image: true,
+      isGuest: true,
       teams: {
         select: {
           id: true,
@@ -58,18 +72,22 @@ export type PlayerUser = Prisma.PromiseReturnType<
   typeof getPlayersUsers
 >[number];
 
-export const getUserById = async (id: string) => {
-  try {
-    const user = await prisma.user.findUnique({
-      where: {
-        id,
-      },
-    });
-    return user;
-  } catch (error) {
-    return null;
-  }
+export const getGuestUsers = async () => {
+  return prisma.user.findMany({
+    where: {
+      isGuest: true,
+    },
+    select: {
+      id: true,
+      username: true,
+    },
+    orderBy: {
+      username: "asc",
+    },
+  });
 };
+
+export type GuestUser = Prisma.PromiseReturnType<typeof getGuestUsers>[number];
 
 export const getUserFixtures = async (userId: string) => {
   try {

@@ -12,7 +12,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   const validatedFields = RegisterSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return { error: "Invalid fields!" };
+    return { error: "Champ(s) invalide(s) !" };
   }
 
   const { email, password, firstname, lastname } = validatedFields.data;
@@ -33,8 +33,8 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     },
   });
 
-  const verficiationToken = await generateVerificationToken(email);
-  await sendVerificationEmail(verficiationToken.email, verficiationToken.token);
+  // const verficiationToken = await generateVerificationToken(email);
+  // await sendVerificationEmail(verficiationToken.email, verficiationToken.token);
 
   return { success: "Confirmation email sent!" };
 };

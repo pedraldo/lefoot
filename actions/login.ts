@@ -13,7 +13,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return { error: "Invalid fields!" };
+    return { error: "Champ(s) invalide(s) !" };
   }
 
   const { email, password } = validatedFields.data;
@@ -23,16 +23,16 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     return { error: "Email does not exist!" };
   }
 
-  if (!existingUser.emailVerified) {
-    const verficiationToken = await generateVerificationToken(
-      existingUser.email
-    );
-    await sendVerificationEmail(
-      verficiationToken.email,
-      verficiationToken.token
-    );
-    return { success: "Confirmation email sent!" };
-  }
+  // if (!existingUser.emailVerified) {
+  //   const verficiationToken = await generateVerificationToken(
+  //     existingUser.email
+  //   );
+  //   await sendVerificationEmail(
+  //     verficiationToken.email,
+  //     verficiationToken.token
+  //   );
+  //   return { success: "Confirmation email sent!" };
+  // }
 
   try {
     await signIn("credentials", {

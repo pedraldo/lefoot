@@ -20,6 +20,7 @@ import {
   useZodForm,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import { useToast } from "../ui/use-toast";
 
 type DataTableRow = {
   id: string;
@@ -46,6 +47,7 @@ export const FixtureForm = ({ users, onSubmit }: FixtureFormProps) => {
   const [awayUsers, setAwayUsers] = useState<User[]>([]);
   const [tableUsers, setTableUsers] = useState<User[]>(users);
   const router = useRouter();
+  const { toast } = useToast();
 
   const form = useZodForm({
     schema: formSchema,
@@ -153,6 +155,9 @@ export const FixtureForm = ({ users, onSubmit }: FixtureFormProps) => {
       form={form}
       onSubmit={async (values) => {
         await onSubmit(values);
+        toast({
+          title: "Le match a bien été créé",
+        });
         router.push(`/fixtures`);
         router.refresh();
       }}
@@ -176,7 +181,7 @@ export const FixtureForm = ({ users, onSubmit }: FixtureFormProps) => {
         />
         <div>
           <div className="text-sm font-medium mb-4">
-            Composition des équipes (au moins 4 joueurs)
+            Composition des équipes (au moins 4 joueur·euse·s)
           </div>
           <DataTable columns={columns} data={tableUsers} />
         </div>

@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUserById, getUserFixtures } from "@/queries/user";
 import { formatUserFixturesForStats } from "@/services/user";
+import { RiUser3Line } from "react-icons/ri";
 
 const UserStats = async ({ userId }: { userId: string | undefined }) => {
   if (!userId) {
@@ -26,14 +27,25 @@ const UserStats = async ({ userId }: { userId: string | undefined }) => {
               <AvatarImage src={user.image} alt={user.username ?? ""} />
             ) : null}
             <AvatarFallback>
-              <span className="text-5xl">
-                {user.username.slice(0, 2).toUpperCase()}
-              </span>
+              {user.isGuest ? (
+                <RiUser3Line className="h-16 w-16" />
+              ) : (
+                <span className="text-5xl">
+                  {user.username.slice(0, 2).toUpperCase()}
+                </span>
+              )}
             </AvatarFallback>
           </Avatar>
         </div>
         <div className="flex w-full gap-4 justify-between items-center max-sm:flex-col max-sm max-sm:justify-center">
-          <div className="text-3xl font-bold">{user.username}</div>
+          <div className="flex flex-col max-sm:items-center">
+            <span className="text-3xl font-bold">{user.username}</span>
+            {user.isGuest && (
+              <span className="text-muted-foreground text-lg italic">
+                Invité
+              </span>
+            )}
+          </div>
           <div>
             {userStats.series.map((series, index) => {
               if (index < 5) {

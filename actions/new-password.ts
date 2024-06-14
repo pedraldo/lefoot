@@ -17,7 +17,7 @@ export const newPassword = async (
   const validatedFields = NewPasswordSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return { error: "Invalid fields!" };
+    return { error: "Champ(s) invalide(s) !" };
   }
 
   const { password, confirm } = validatedFields.data;
@@ -48,6 +48,7 @@ export const newPassword = async (
     },
     data: {
       password: hashedPassword,
+      emailVerified: new Date(),
     },
   });
 

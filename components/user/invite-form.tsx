@@ -1,10 +1,10 @@
 "use client";
 
-import { newPassword } from "@/actions/new-password";
-import { NewPasswordSchema } from "@/schemas";
-import { useRouter, useSearchParams } from "next/navigation";
+import { inviteUser } from "@/actions/invite-user";
+import { InviteUserSchema } from "@/schemas";
 import { useState, useTransition } from "react";
 import { z } from "zod";
+import CardWrapper from "../auth/card-wrapper";
 import FormError from "../form/form-error";
 import FormSuccess from "../form/form-success";
 import { Button } from "../ui/button";
@@ -19,70 +19,63 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
-import CardWrapper from "./card-wrapper";
+import { useRouter } from "next/navigation";
 
-export default function NewPasswordForm() {
+const InviteForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
-  const router = useRouter();
-  const { toast } = useToast();
 
   const [isPending, startTransition] = useTransition();
 
   const form = useZodForm({
-    schema: NewPasswordSchema,
+    schema: InviteUserSchema,
     defaultValues: {
-      password: "",
-      confirm: "",
+      firstname: "",
+      lastname: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof NewPasswordSchema>) => {
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const onSubmit = (values: z.infer<typeof InviteUserSchema>) => {
+    setError("");
+    setSuccess("");
+
     startTransition(async () => {
-      const { error, success } = await newPassword(values, token);
+      const { error, success } = await inviteUser(values);
       setError(error);
       setSuccess(success);
 
-      if (success && !error) {
-        toast({
-          title: "Mot de passe mis à jour",
-        });
-        router.push("/auth/login");
-      }
-
       if (error) {
         toast({
-          title:
-            "Erreur lors de la mise à jour du mot de passe (le lien est peut étre expiré)",
           variant: "destructive",
+          title: "Erreur lors de la création du compte invité",
         });
+      }
+
+      if (success) {
+        toast({
+          title: "Compte invité créé",
+        });
+        router.push("/players");
+        router.refresh();
       }
     });
   };
 
   return (
-    <CardWrapper
-      headerLabel="Créer un nouveau mot de passe"
-      backButtonLabel="Aller à la page de connexion"
-      backButtonHref="/auth/login"
-    >
+    <CardWrapper headerLabel="Créer un·e invité·e">
       <Form form={form} onSubmit={onSubmit} className="space-y-6">
         <div className="space-y-4">
           <FormField
             control={form.control}
-            name="password"
+            name="firstname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Mot de passe</FormLabel>
+                <FormLabel>Prénom</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    disabled={isPending}
-                    placeholder="******"
-                    type="password"
-                  />
+                  <Input {...field} disabled={isPending} placeholder="John" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -90,17 +83,12 @@ export default function NewPasswordForm() {
           />
           <FormField
             control={form.control}
-            name="confirm"
+            name="lastname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Confirmez le mot de passe</FormLabel>
+                <FormLabel>Nom</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    disabled={isPending}
-                    placeholder="******"
-                    type="password"
-                  />
+                  <Input {...field} disabled={isPending} placeholder="Doe" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -110,9 +98,11 @@ export default function NewPasswordForm() {
         <FormError message={error} />
         <FormSuccess message={success} />
         <Button type="submit" className="w-full" disabled={isPending}>
-          Modifier le mot de passe
+          Créer un·e invité·e
         </Button>
       </Form>
     </CardWrapper>
   );
-}
+};
+
+export default InviteForm;
