@@ -79,7 +79,7 @@ export const {
           ...session,
           user: {
             ...session.user,
-            role: token.role,
+            role: token.role as UserRole,
           },
         };
       }

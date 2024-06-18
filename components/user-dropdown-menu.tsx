@@ -8,7 +8,7 @@ import {
 import { RiLogoutBoxRLine, RiSettings5Line, RiUser3Line } from "react-icons/ri";
 import { Button } from "./ui/button";
 
-export const UserDropdownMenu = () => {
+const UserDropdownMenu = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -26,7 +26,7 @@ export const UserDropdownMenu = () => {
           <form
             action={async () => {
               "use server";
-              await signOut();
+              await signOut({ redirectTo: "/auth/login" });
             }}
           >
             <button type="submit">Déconnexion</button>

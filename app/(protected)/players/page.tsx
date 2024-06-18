@@ -12,8 +12,14 @@ import Link from "next/link";
 import { RiShieldUserLine, RiUserAddLine } from "react-icons/ri";
 import { columns } from "./columns";
 
-const Players = async () => {
+export const dynamic = "force-dynamic";
+
+const PlayersPage = async () => {
   const playersUsers = await getPlayersUsers();
+
+  if (!playersUsers) {
+    return <p>Erreur lors de la récupération des données des joueurs ...</p>;
+  }
   const isOneGuestUser = playersUsers.some((playerUser) => playerUser.isGuest);
   const playersUsersData = formatUsersForPlayersTable(playersUsers);
 
@@ -47,9 +53,14 @@ const Players = async () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <DataTable columns={columns} data={playersUsersData} />
+      {playersUsers.length === 0 && (
+        <p>Aucun joueur·euse. Il semble y avoir un problème ...</p>
+      )}
+      {playersUsers.length > 0 && (
+        <DataTable columns={columns} data={playersUsersData} />
+      )}
     </div>
   );
 };
 
-export default Players;
+export default PlayersPage;

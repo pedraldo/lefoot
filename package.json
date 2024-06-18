@@ -1,13 +1,15 @@
 {
-  "name": "auth-tutorial",
+  "name": "lefoot",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "start:prod": "npx prisma migrate deploy && node server.js",
     "lint": "next lint",
-    "prisma:seed": "prisma db seed"
+    "prisma:seed": "prisma db seed",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^1.5.0",
@@ -30,7 +32,7 @@
     "clsx": "^2.1.0",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
-    "next": "14.1.4",
+    "next": "^14.2.4",
     "next-auth": "^5.0.0-beta.15",
     "next-themes": "^0.3.0",
     "react": "^18",
@@ -40,6 +42,7 @@
     "react-icons": "^5.0.1",
     "react-spinners": "^0.13.8",
     "resend": "^3.2.0",
+    "sharp": "^0.33.4",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^9.0.1",

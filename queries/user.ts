@@ -28,66 +28,83 @@ export const getUserById = async (id: string) => {
 };
 
 export const getAllUsers = async () => {
-  return prisma.user.findMany({
-    orderBy: {
-      username: "asc",
-    },
-  });
+  try {
+    const users = await prisma.user.findMany({
+      orderBy: {
+        username: "asc",
+      },
+    });
+    return users;
+  } catch (error) {
+    return null;
+  }
 };
 
 export const getPlayersUsers = async () => {
-  return prisma.user.findMany({
-    select: {
-      id: true,
-      username: true,
-      image: true,
-      isGuest: true,
-      teams: {
-        select: {
-          id: true,
-          homeFixtures: {
-            select: {
-              id: true,
-              homeScore: true,
-              awayScore: true,
+  try {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        image: true,
+        isGuest: true,
+        teams: {
+          select: {
+            id: true,
+            homeFixtures: {
+              select: {
+                id: true,
+                homeScore: true,
+                awayScore: true,
+              },
             },
-          },
-          awayFixtures: {
-            select: {
-              id: true,
-              homeScore: true,
-              awayScore: true,
+            awayFixtures: {
+              select: {
+                id: true,
+                homeScore: true,
+                awayScore: true,
+              },
             },
           },
         },
       },
-    },
-    orderBy: {
-      username: "asc",
-    },
-  });
+      orderBy: {
+        username: "asc",
+      },
+    });
+    return users;
+  } catch (error) {
+    return null;
+  }
 };
 
-export type PlayerUser = Prisma.PromiseReturnType<
-  typeof getPlayersUsers
+export type PlayerUser = NonNullable<
+  Prisma.PromiseReturnType<typeof getPlayersUsers>
 >[number];
 
 export const getGuestUsers = async () => {
-  return prisma.user.findMany({
-    where: {
-      isGuest: true,
-    },
-    select: {
-      id: true,
-      username: true,
-    },
-    orderBy: {
-      username: "asc",
-    },
-  });
+  try {
+    const users = await prisma.user.findMany({
+      where: {
+        isGuest: true,
+      },
+      select: {
+        id: true,
+        username: true,
+      },
+      orderBy: {
+        username: "asc",
+      },
+    });
+    return users;
+  } catch (error) {
+    return null;
+  }
 };
 
-export type GuestUser = Prisma.PromiseReturnType<typeof getGuestUsers>[number];
+export type GuestUser = NonNullable<
+  Prisma.PromiseReturnType<typeof getGuestUsers>
+>[number];
 
 export const getUserFixtures = async (userId: string) => {
   try {
