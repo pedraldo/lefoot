@@ -1,11 +1,9 @@
-import Footer from "@/components/layout/footer";
-import Header from "@/components/layout/header";
+import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/theme/ThemeProvider";
 import clsx from "clsx";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,7 +28,6 @@ export const metadata: Metadata = {
 
 type LayoutProps = {
   children: React.ReactNode;
-  modal: React.ReactNode;
 };
 
 export default async function RootLayout({ children }: LayoutProps) {
