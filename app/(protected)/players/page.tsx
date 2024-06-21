@@ -18,7 +18,11 @@ const PlayersPage = async () => {
   const playersUsers = await getPlayersUsers();
 
   if (!playersUsers) {
-    return <p>Erreur lors de la récupération des données des joueurs ...</p>;
+    return (
+      <div className="w-full text-center">
+        Erreur lors de la récupération des données des joueurs ...
+      </div>
+    );
   }
   const isOneGuestUser = playersUsers.some((playerUser) => playerUser.isGuest);
   const playersUsersData = formatUsersForPlayersTable(playersUsers);
@@ -54,7 +58,9 @@ const PlayersPage = async () => {
         </DropdownMenu>
       </div>
       {playersUsers.length === 0 && (
-        <p>Aucun joueur·euse. Il semble y avoir un problème ...</p>
+        <div className="w-full text-center">
+          Aucun joueur·euse. Il semble y avoir un problème ...
+        </div>
       )}
       {playersUsers.length > 0 && (
         <DataTable columns={columns} data={playersUsersData} />

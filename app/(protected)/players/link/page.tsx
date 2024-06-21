@@ -7,7 +7,11 @@ const LinkGuestPage = async () => {
   const guestUsers = await getGuestUsers();
 
   if (!guestUsers) {
-    return <p>Erreur lors de la récupération des données des invité·e·s ...</p>;
+    return (
+      <div className="w-full text-center">
+        Erreur lors de la récupération des données des invité·e·s ...
+      </div>
+    );
   }
 
   return (

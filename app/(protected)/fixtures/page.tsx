@@ -26,9 +26,13 @@ export default async function FixturesPage() {
             <FixtureCard key={fixture.id} fixture={fixture} />
           ))}
         {fixtures && fixtures.length === 0 && (
-          <p>{`Aucun match pour l'instant`}</p>
+          <div className="w-full text-center">{`Aucun match pour l'instant`}</div>
         )}
-        {!fixtures && <p>Erreur lors de la récupération des matchs ...</p>}
+        {!fixtures && (
+          <div className="w-full text-center">
+            Erreur lors de la récupération des matchs ...
+          </div>
+        )}
       </div>
     </>
   );

@@ -6,13 +6,17 @@ import { RiUser3Line } from "react-icons/ri";
 
 const UserStats = async ({ userId }: { userId: string | undefined }) => {
   if (!userId) {
-    return <p>{`Impossible de récupérer le numéro unique cet utilisateur.`}</p>;
+    return (
+      <div className="w-full text-center">{`Impossible de récupérer les informations cet utilisateur.`}</div>
+    );
   }
 
   const user = await getUserById(userId);
 
   if (!user) {
-    return <p>{`Joueur ou joueuse inconnu·e au bataillon.`}</p>;
+    return (
+      <div className="w-full text-center">{`Joueur ou joueuse inconnu·e au bataillon.`}</div>
+    );
   }
 
   const userFixtures = await getUserFixtures(userId);

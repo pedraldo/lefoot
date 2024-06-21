@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<p>Login not working</p>}>
+    <Suspense fallback={<p>Chargement de la page de connexion ...</p>}>
       <LoginForm />
     </Suspense>
   );
