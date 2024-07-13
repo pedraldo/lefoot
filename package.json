@@ -8,7 +8,10 @@
     "start": "next start",
     "start:prod": "npx prisma migrate deploy && node server.js",
     "lint": "next lint",
-    "prisma:seed": "prisma db seed",
+    "prisma:seed": "dotenv -e .env.development -- npx prisma db seed",
+    "prisma:migrate": "dotenv -e .env.development -e .env -- npx prisma migrate dev",
+    "prisma:reset": "dotenv -e .env.development -e .env -- npx prisma migrate reset",
+    "prisma:deploy": "dotenv -e .env.deploy -e .env -- npx prisma migrate deploy",
     "postinstall": "prisma generate"
   },
   "dependencies": {
@@ -33,6 +36,7 @@
     "clsx": "^2.1.0",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
+    "immer": "^10.1.1",
     "next": "^14.2.4",
     "next-auth": "^5.0.0-beta.15",
     "next-themes": "^0.3.0",
@@ -47,7 +51,8 @@
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^9.0.1",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zustand": "^4.5.3"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -56,6 +61,7 @@
     "@types/react-dom": "^18",
     "@types/uuid": "^9.0.8",
     "autoprefixer": "^10.0.1",
+    "dotenv": "^16.4.5",
     "eslint": "^8",
     "eslint-config-next": "14.1.4",
     "postcss": "^8",

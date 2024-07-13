@@ -1,5 +1,6 @@
 import { formatNumberToPercent } from "@/lib/utils";
-import { PlayerUser, UserFixtures } from "@/queries/user";
+import { PlayerUser } from "@/queries/squad";
+import { UserSquadFixtures } from "@/queries/user";
 
 export type PlayerUserData = {
   id: string;
@@ -49,7 +50,7 @@ export const formatUsersForPlayersTable = (
       id: playerUser.id,
       image: playerUser.image,
       username: playerUser.username,
-      isGuest: playerUser.isGuest,
+      isGuest: !!playerUser.guestSquads[0]?.id,
       nbFixtures: fixturesData.nbFixtures,
       nbFixturesWon: fixturesData.nbFixturesWon,
       nbFixturesLost: fixturesData.nbFixturesLost,
@@ -63,7 +64,7 @@ export const formatUsersForPlayersTable = (
   });
 };
 
-type FixtureForStats = (UserFixtures & {
+type FixtureForStats = (UserSquadFixtures & {
   id: string;
 })["teams"][0]["homeFixtures"][0];
 
@@ -72,6 +73,12 @@ type BestSeriesData = { datetime: Date | null; count: number };
 type ResultsSeries = "V" | "D" | "N";
 
 export type UserFixturesForStats = {
+  user: {
+    id: string;
+    username: string;
+    image: string;
+    isGuest: boolean;
+  } | null;
   winFixtures: FixtureForStats[];
   loseFixtures: FixtureForStats[];
   drawFixtures: FixtureForStats[];
@@ -84,10 +91,11 @@ export type UserFixturesForStats = {
   bestDefeatSeries: BestSeriesData;
 };
 export const formatUserFixturesForStats = (
-  user: UserFixtures
+  user: UserSquadFixtures
 ): UserFixturesForStats => {
   if (!user) {
     return {
+      user: null,
       winFixtures: [] as FixtureForStats[],
       loseFixtures: [] as FixtureForStats[],
       drawFixtures: [] as FixtureForStats[],
@@ -116,7 +124,7 @@ export const formatUserFixturesForStats = (
       const isHomeFixture = !!team.homeFixtures[0];
 
       const { winFixtures, loseFixtures, drawFixtures, series } =
-        sortFixutresByResult(fixture, isHomeFixture, acc);
+        sortFixturesByResult(fixture, isHomeFixture, acc);
 
       const isWin = winFixtures.length > acc.winFixtures.length;
       const isDefeat = loseFixtures.length > acc.loseFixtures.length;
@@ -139,7 +147,7 @@ export const formatUserFixturesForStats = (
         );
       currentDefeatSeries = currentSeriesD;
 
-      // Do this only at the last occurence
+      // Do this only at the last occurence to calculate results percentages
       if (index === user?.teams.length - 1) {
         const { percentWins, percentDefeats, percentDraws } =
           getFixturesResultsPercents(
@@ -165,6 +173,12 @@ export const formatUserFixturesForStats = (
       };
     },
     {
+      user: {
+        id: user.id,
+        image: user.image || "",
+        username: user.username,
+        isGuest: !!user.guestSquads[0]?.id,
+      },
       winFixtures: [] as FixtureForStats[],
       loseFixtures: [] as FixtureForStats[],
       drawFixtures: [] as FixtureForStats[],
@@ -179,7 +193,7 @@ export const formatUserFixturesForStats = (
   );
 };
 
-const sortFixutresByResult = (
+const sortFixturesByResult = (
   fixture: FixtureForStats,
   isHomeFixture: boolean,
   statsObj: UserFixturesForStats

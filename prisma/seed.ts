@@ -6,8 +6,35 @@ const prisma = new PrismaClient();
 const main = async () => {
   const NB_FIXTURES = 4;
 
+  const user = {
+    firstname: "Zinédine",
+    lastname: "Zidane",
+    username: `Zizou`,
+    image: faker.image.avatar(),
+    email: faker.internet.email(),
+    emailVerified: faker.date.anytime(),
+  } satisfies Prisma.UserCreateInput;
+
+  const zzDBUser = await prisma.user.create({
+    data: user,
+  });
+
+  const squad = {
+    name: "Le Foot Squad",
+    createdAt: faker.date.recent(),
+    creator: {
+      connect: { id: zzDBUser.id, email: zzDBUser.email! },
+    },
+    users: {
+      connect: [{ id: zzDBUser.id, email: zzDBUser.email! }],
+    },
+  } satisfies Prisma.SquadCreateInput;
+  const dbSquad = await prisma.squad.create({
+    data: squad,
+  });
+
   const users = [];
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 11; i++) {
     const firstname = faker.person.firstName();
     const lastname = faker.person.lastName();
     const user = {
@@ -17,6 +44,9 @@ const main = async () => {
       image: faker.image.avatar(),
       email: faker.internet.email(),
       emailVerified: faker.date.anytime(),
+      squads: {
+        connect: [{ id: dbSquad.id }],
+      },
     } satisfies Prisma.UserCreateInput;
 
     const dbUser = await prisma.user.create({
@@ -67,6 +97,9 @@ const main = async () => {
               connect: homeUsers.map((user) => ({ id: user.id })),
             },
             creationDate: datetime,
+            squad: {
+              connect: { id: dbSquad.id },
+            },
           },
         },
         awayTeam: {
@@ -75,7 +108,13 @@ const main = async () => {
               connect: awayUsers.map((user) => ({ id: user.id })),
             },
             creationDate: datetime,
+            squad: {
+              connect: { id: dbSquad.id },
+            },
           },
+        },
+        squad: {
+          connect: { id: dbSquad.id },
         },
       },
     });

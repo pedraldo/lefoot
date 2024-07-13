@@ -1,10 +1,11 @@
 "use server";
 
+import { InviteUserValues } from "@/components/user/invite-form";
 import { prisma } from "@/lib/db";
 import { InviteUserSchema } from "@/schemas";
-import { z } from "zod";
 
-export const inviteUser = async (values: z.infer<typeof InviteUserSchema>) => {
+export const inviteUser = async (values: InviteUserValues) => {
+  const { squadId, ...schemaValues } = values;
   const validatedFields = InviteUserSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -18,7 +19,15 @@ export const inviteUser = async (values: z.infer<typeof InviteUserSchema>) => {
       firstname,
       lastname,
       username: `${firstname} ${lastname}`,
-      isGuest: true,
+      squads: {
+        connect: [{ id: values.squadId }],
+      },
+      guestSquads: {
+        connect: [{ id: values.squadId }],
+      },
+      targetedSquad: {
+        connect: { id: values.squadId },
+      },
     },
   });
 

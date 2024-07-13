@@ -58,24 +58,31 @@ enum UserRole {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  firstname     String
-  lastname      String
-  username      String
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  isGuest       Boolean   @default(false)
-  role          UserRole  @default(USER)
-  accounts      Account[]
-  teams         Team[]
+  id              String    @id @default(cuid())
+  firstname       String
+  lastname        String
+  username        String
+  email           String?   @unique
+  emailVerified   DateTime?
+  image           String?
+  password        String?
+  role            UserRole  @default(USER)
+  accounts        Account[]
+  teams           Team[]
+  squads          Squad[]   @relation("UserSquad")
+  guestSquads     Squad[]   @relation("UserGuestSquad")
+  createdSquads   Squad[]   @relation("SquadCreator")
+  targetedSquadId String?
+  targetedSquad   Squad?    @relation("UserTargetSquad", fields: [targetedSquadId], references: [id], onDelete: NoAction)
 }
 
 model Team {
   id           String   @id @default(cuid())
   creationDate DateTime
   users        User[]
+
+  squadId String
+  squad   Squad  @relation(fields: [squadId], references: [id], onDelete: Cascade)
 
   // fixture   Fixture? @relation(fields: [fixtureId], references: [id])
   // fixtureId String?
@@ -95,5 +102,22 @@ model Fixture {
   homeTeam Team @relation("HomeTeamFixture", fields: [homeTeamId], references: [id], onDelete: Cascade)
   awayTeam Team @relation("AwayTeamFixutre", fields: [awayTeamId], references: [id], onDelete: Cascade)
 
+  squadId String
+  squad   Squad  @relation(fields: [squadId], references: [id], onDelete: Cascade)
+
   // Team Team[]
+}
+
+model Squad {
+  id            String    @id @default(cuid())
+  name          String
+  createdAt     DateTime
+  users         User[]    @relation("UserSquad")
+  targeterUsers User[]    @relation("UserTargetSquad")
+  guestUsers    User[]    @relation("UserGuestSquad")
+  fixtures      Fixture[]
+  teams         Team[]
+
+  creatorId String
+  creator   User   @relation("SquadCreator", fields: [creatorId], references: [id], onDelete: Cascade)
 }

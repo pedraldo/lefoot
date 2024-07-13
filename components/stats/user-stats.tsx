@@ -1,26 +1,19 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getUserById, getUserFixtures } from "@/queries/user";
-import { formatUserFixturesForStats } from "@/services/user";
+import { UserFixturesForStats } from "@/services/user";
 import { RiUser3Line } from "react-icons/ri";
 
-const UserStats = async ({ userId }: { userId: string | undefined }) => {
-  if (!userId) {
-    return (
-      <div className="w-full text-center">{`Impossible de récupérer les informations cet utilisateur.`}</div>
-    );
-  }
-
-  const user = await getUserById(userId);
+const UserStats = async ({ stats }: { stats: UserFixturesForStats }) => {
+  const user = stats.user;
 
   if (!user) {
     return (
-      <div className="w-full text-center">{`Joueur ou joueuse inconnu·e au bataillon.`}</div>
+      <div className="flex flex-col gap-2 w-full text-center">
+        <p>{`Impossible de récupérer les informations du·de la joueur·euse.`}</p>
+        <p>{`Le·la joueur·euse n'est pas reconnu.`}</p>
+      </div>
     );
   }
-
-  const userFixtures = await getUserFixtures(userId);
-  const userStats = formatUserFixturesForStats(userFixtures);
 
   return (
     <div className="flex flex-col gap-8">
@@ -43,7 +36,7 @@ const UserStats = async ({ userId }: { userId: string | undefined }) => {
         </div>
         <div className="flex w-full gap-4 justify-between items-center max-sm:flex-col max-sm max-sm:justify-center">
           <div className="flex flex-col max-sm:items-center">
-            <span className="text-3xl font-bold">{user.username}</span>
+            <span className="text-3xl font-bold">{user?.username}</span>
             {user.isGuest && (
               <span className="text-muted-foreground text-lg italic">
                 Invité
@@ -51,7 +44,7 @@ const UserStats = async ({ userId }: { userId: string | undefined }) => {
             )}
           </div>
           <div>
-            {userStats.series.map((series, index) => {
+            {stats.series.map((series, index) => {
               if (index < 5) {
                 if (series === "V") {
                   return (
@@ -94,7 +87,7 @@ const UserStats = async ({ userId }: { userId: string | undefined }) => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {userStats.winFixtures.length}
+              {stats.winFixtures.length}
             </div>
             <p className="text-xs text-muted-foreground">
               {/* +20.1% from last month */}
@@ -110,7 +103,7 @@ const UserStats = async ({ userId }: { userId: string | undefined }) => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {userStats.percentWins + " %"}
+              {stats.percentWins + " %"}
             </div>
             <p className="text-xs text-muted-foreground">
               {/* +180.1% from last month */}
@@ -126,7 +119,7 @@ const UserStats = async ({ userId }: { userId: string | undefined }) => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {userStats.bestWinSeries.count}
+              {stats.bestWinSeries.count}
             </div>
             <p className="text-xs text-muted-foreground">
               {/* +19% from last month */}
@@ -140,7 +133,7 @@ const UserStats = async ({ userId }: { userId: string | undefined }) => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-destructive">
-              {userStats.bestDefeatSeries.count}
+              {stats.bestDefeatSeries.count}
             </div>
             <p className="text-xs text-muted-foreground">
               {/* +19% from last month */}
@@ -154,7 +147,7 @@ const UserStats = async ({ userId }: { userId: string | undefined }) => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-destructive">
-              {userStats.loseFixtures.length}
+              {stats.loseFixtures.length}
             </div>
             <p className="text-xs text-muted-foreground">
               {/* +19% from last month */}
@@ -168,7 +161,7 @@ const UserStats = async ({ userId }: { userId: string | undefined }) => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-destructive">
-              {userStats.percentDefeats + " %"}
+              {stats.percentDefeats + " %"}
             </div>
             <p className="text-xs text-muted-foreground">
               {/* +201 since last hour */}
@@ -182,7 +175,7 @@ const UserStats = async ({ userId }: { userId: string | undefined }) => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {userStats.drawFixtures.length}
+              {stats.drawFixtures.length}
             </div>
             <p className="text-xs text-muted-foreground">
               {/* +201 since last hour */}
@@ -196,7 +189,7 @@ const UserStats = async ({ userId }: { userId: string | undefined }) => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {userStats.percentDraws + " %"}
+              {stats.percentDraws + " %"}
             </div>
             <p className="text-xs text-muted-foreground">
               {/* +201 since last hour */}

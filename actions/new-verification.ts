@@ -7,17 +7,17 @@ import { getVerificationTokenByToken } from "@/queries/verification-token";
 export const newVerification = async (token: string) => {
   const existingToken = await getVerificationTokenByToken(token);
   if (!existingToken) {
-    return { error: "Token does not exist !" };
+    return { error: "Token inconnu !" };
   }
 
   const hasExpired = new Date(existingToken.expires) < new Date();
   if (hasExpired) {
-    return { error: "Token has expired !" };
+    return { error: "Token expiré !" };
   }
 
   const existingUser = await getUserByEmail(existingToken.email);
   if (!existingUser) {
-    return { error: "Email does not exist !" };
+    return { error: "Email inconnu !" };
   }
 
   await prisma.user.update({

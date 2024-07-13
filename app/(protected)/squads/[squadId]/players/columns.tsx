@@ -8,6 +8,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { LuArrowUpDown } from "react-icons/lu";
 import { RiUser3Line } from "react-icons/ri";
+import UserLink from "@/components/user/user-link";
 
 export const columns: ColumnDef<PlayerUserData>[] = [
   {
@@ -18,7 +19,7 @@ export const columns: ColumnDef<PlayerUserData>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Joueur
+          Joueur·euse
           <LuArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -28,21 +29,12 @@ export const columns: ColumnDef<PlayerUserData>[] = [
       const username = row.original.username;
       const isGuest = row.original.isGuest;
       return (
-        <Link href={`/players/${row.original.id}`} prefetch={false}>
-          <div className="flex items-center gap-2 [@media(width<=480px)]:flex-col">
-            <Avatar size="default">
-              {image ? <AvatarImage src={image} alt={username ?? ""} /> : null}
-              <AvatarFallback>
-                {isGuest ? (
-                  <RiUser3Line className="h-4 w-4" />
-                ) : (
-                  username.slice(0, 2).toUpperCase()
-                )}
-              </AvatarFallback>
-            </Avatar>
-            <span className="text-center">{username}</span>
-          </div>
-        </Link>
+        <UserLink
+          userId={row.original.id}
+          image={image}
+          username={username}
+          isGuest={isGuest}
+        />
       );
     },
   },

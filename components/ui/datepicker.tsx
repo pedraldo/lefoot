@@ -31,7 +31,7 @@ export function DatePicker({
           {field.value ? (
             format(field.value, "PPP", { locale: fr })
           ) : (
-            <span>Choisissez une date</span>
+            <span>Choisis une date</span>
           )}
         </Button>
       </PopoverTrigger>

@@ -6,7 +6,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { RiLogoutBoxRLine, RiSettings5Line, RiUser3Line } from "react-icons/ri";
-import { Button } from "./ui/button";
+import LogoutButton from "../auth/logout-button";
+import { Button } from "../ui/button";
 
 const UserDropdownMenu = () => {
   return (
@@ -29,7 +30,7 @@ const UserDropdownMenu = () => {
               await signOut({ redirectTo: "/auth/login" });
             }}
           >
-            <button type="submit">Déconnexion</button>
+            <LogoutButton />
           </form>
         </DropdownMenuItem>
       </DropdownMenuContent>

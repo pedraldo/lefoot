@@ -1,23 +1,21 @@
 import FixtureCard from "@/components/fixture/fixture-card";
-import { buttonVariants } from "@/components/ui/button";
-import { getAllFixtures } from "@/queries/fixture";
-import Link from "next/link";
-import { RiAddFill } from "react-icons/ri";
+import { getSquadFixtures } from "@/queries/squad";
+import CreateFixtureButton from "@/components/fixture/create-fixture-button";
 
 export const dynamic = "force-dynamic";
 
-export default async function FixturesPage() {
-  const fixtures = await getAllFixtures();
+export default async function FixturesPage({
+  params,
+}: {
+  params: { squadId: string };
+}) {
+  const squadId = params.squadId;
+  const fixtures = await getSquadFixtures(squadId);
 
   return (
     <>
       <div className="w-full text-right">
-        <Link
-          href="/fixtures/create"
-          className={buttonVariants({ variant: "default" })}
-        >
-          <RiAddFill className="mr-2 h-4 w-4" /> Créer un match
-        </Link>
+        <CreateFixtureButton />
       </div>
       <div className="flex flex-col gap-4 mt-4">
         {fixtures &&
@@ -29,8 +27,9 @@ export default async function FixturesPage() {
           <div className="w-full text-center">{`Aucun match pour l'instant`}</div>
         )}
         {!fixtures && (
-          <div className="w-full text-center">
-            Erreur lors de la récupération des matchs ...
+          <div className="flex flex-col gap-2 w-full text-center">
+            <p>Erreur lors de la récupération des matchs</p>
+            <p>{`L'équipe est probablement inconnue.`}</p>
           </div>
         )}
       </div>

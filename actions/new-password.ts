@@ -27,7 +27,7 @@ export const newPassword = async (
 
   const existingToken = await getPasswordResetTokenByToken(token);
   if (!existingToken) {
-    return { error: "Token does not exist !" };
+    return { error: "Token inconnu !" };
   }
 
   const hasExpired = new Date(existingToken.expires) < new Date();
@@ -37,7 +37,7 @@ export const newPassword = async (
 
   const existingUser = await getUserByEmail(existingToken.email);
   if (!existingUser) {
-    return { error: "Email does not exist !" };
+    return { error: "Email inconnu !" };
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);

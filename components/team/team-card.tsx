@@ -1,13 +1,13 @@
-import { User } from "@prisma/client";
+import { UserWithSquadsIds } from "@/queries/user";
 import { LuX } from "react-icons/lu";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
+} from "../ui/card";
 
 const TeamCard = ({
   type,
@@ -15,8 +15,8 @@ const TeamCard = ({
   removeUser,
 }: {
   type: "home" | "away";
-  users: User[];
-  removeUser?: (user: User) => void;
+  users: UserWithSquadsIds[]; // TODO type here is specific to fixture creation page. Have to create and use generic type
+  removeUser?: (user: UserWithSquadsIds) => void;
 }) => {
   return (
     <Card>

@@ -49,13 +49,13 @@ export default function RegisterForm() {
       if (error) {
         toast({
           variant: "destructive",
-          title: "Erreur lors de la création de votre compte",
+          title: "Erreur lors de la création de ton compte",
         });
       }
 
       if (success) {
         toast({
-          title: "Votre compte a bien été créé",
+          title: "Ton compte a bien été créé",
         });
         router.push("/auth/login");
         router.refresh();

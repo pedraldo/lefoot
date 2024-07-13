@@ -21,11 +21,14 @@ export default {
       async authorize(credentials) {
         // Validate LoginSchema here in case someone try to access to the app
         // in a different way than Front application
+        console.log("Credentials authorize start");
         const validateFields = LoginSchema.safeParse(credentials);
 
         if (validateFields.success) {
           const { email, password } = validateFields.data;
+          console.log("Credentials authorize get user by email");
           const user = await getUserByEmail(email);
+          console.log("Credentials authorize user", user);
 
           if (!user || !user.password) {
             return null;
@@ -35,7 +38,9 @@ export default {
           if (passwordsMatch) {
             return user;
           }
+          console.log("Credentials authorize passwords don't match");
         }
+        console.log("Credentials authorize final null return");
         return null;
       },
     }),

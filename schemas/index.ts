@@ -17,26 +17,32 @@ export const RegisterSchema = z.object({
     message: "Le mot de passe doit contenir au moins 6 caractères",
   }),
   firstname: z.string().min(1, {
-    message: "Veuillez entrer un prénom",
+    message: "Entre un prénom",
   }),
   lastname: z.string().min(1, {
-    message: "Veuillez entrer un nom",
+    message: "Entre un nom",
   }),
 });
 
 export const InviteUserSchema = z.object({
   firstname: z.string().min(1, {
-    message: "Veuillez entrer un prénom",
+    message: "Entre un prénom",
   }),
   lastname: z.string().min(1, {
-    message: "Veuillez entrer un nom",
+    message: "Entre un nom",
   }),
 });
 
 export const LinkGuestSchema = z.object({
   guestId: z.string().cuid({
-    message: "Veuillez entrer un nom",
+    message: "Sélectionne un·e invité·e",
   }),
+  email: z.string().email({
+    message: "Email requis",
+  }),
+});
+
+export const AddUserSchema = z.object({
   email: z.string().email({
     message: "Email requis",
   }),

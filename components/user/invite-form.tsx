@@ -2,7 +2,9 @@
 
 import { inviteUser } from "@/actions/invite-user";
 import { InviteUserSchema } from "@/schemas";
-import { useState, useTransition } from "react";
+import { useAppStore } from "@/store/store-bis";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 import { z } from "zod";
 import CardWrapper from "../auth/card-wrapper";
 import FormError from "../form/form-error";
@@ -19,13 +21,21 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
-import { useRouter } from "next/navigation";
+
+export type InviteUserValues = z.infer<typeof InviteUserSchema> & {
+  squadId: string;
+};
 
 const InviteForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-
   const [isPending, startTransition] = useTransition();
+  const squadId = useAppStore((state) => state.user)?.targetedSquad?.id;
+
+  // hydrate persisted store after on mount
+  useEffect(() => {
+    useAppStore.persist.rehydrate();
+  }, []);
 
   const form = useZodForm({
     schema: InviteUserSchema,
@@ -38,12 +48,22 @@ const InviteForm = () => {
   const { toast } = useToast();
   const router = useRouter();
 
+  if (!squadId) {
+    return (
+      <div className="flex flex-col gap-2 w-full text-center">
+        <p>{`Erreur lors de la récupération d'informations nécessaires à l'invitation
+        d'un·e joueur·euse.`}</p>
+        <p>{`L'équipe est probablement inconnue.`}</p>
+      </div>
+    );
+  }
+
   const onSubmit = (values: z.infer<typeof InviteUserSchema>) => {
     setError("");
     setSuccess("");
 
     startTransition(async () => {
-      const { error, success } = await inviteUser(values);
+      const { error, success } = await inviteUser({ ...values, squadId });
       setError(error);
       setSuccess(success);
 
@@ -58,7 +78,10 @@ const InviteForm = () => {
         toast({
           title: "Compte invité créé",
         });
-        router.push("/players");
+
+        if (squadId) {
+          router.push(`/squads/${squadId}/players`);
+        }
         router.refresh();
       }
     });

@@ -1,6 +1,5 @@
 "use client";
 
-import { FixtureWithTeams } from "@/queries/fixture";
 import { format } from "date-fns";
 import { useState } from "react";
 import { RiArrowDownWideFill } from "react-icons/ri";
@@ -13,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import { FixtureWithTeams } from "@/queries/squad";
 
 const FixtureCard = ({ fixture }: { fixture: FixtureWithTeams }) => {
   const [isExpanded, setIsExpanded] = useState(false);

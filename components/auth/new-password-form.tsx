@@ -93,7 +93,7 @@ export default function NewPasswordForm() {
             name="confirm"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Confirmez le mot de passe</FormLabel>
+                <FormLabel>Confirme le mot de passe</FormLabel>
                 <FormControl>
                   <Input
                     {...field}

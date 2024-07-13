@@ -20,7 +20,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   const existingUser = await getUserByEmail(email);
 
   if (existingUser) {
-    return { error: "Email already in use!" };
+    return { error: "Email déjà utilisé." };
   }
 
   await prisma.user.create({
@@ -33,8 +33,9 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     },
   });
 
-  // const verficiationToken = await generateVerificationToken(email);
-  // await sendVerificationEmail(verficiationToken.email, verficiationToken.token);
+  // const verficationToken = await generateVerificationToken(email);
+  // await sendVerificationEmail(verficationToken.email, verficationToken.token);
 
-  return { success: "Confirmation email sent!" };
+  // return { success: "Confirmation email sent!" };
+  return { success: "Compte créé !" };
 };

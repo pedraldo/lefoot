@@ -1,10 +1,12 @@
 "use client";
 
 import { login } from "@/actions/login";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { LoginSchema } from "@/schemas";
+import { useAppStore } from "@/store/store-bis";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 import { z } from "zod";
 import FormError from "../form/form-error";
 import FormSuccess from "../form/form-success";
@@ -25,13 +27,14 @@ export default function LoginForm() {
   const searchParams = useSearchParams();
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
-      ? "Email already used by another provider"
+      ? "Email déjà utilisé par un autre moyen d'authentification"
       : "";
 
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const loginStore = useAppStore((state) => state.login);
 
   const form = useZodForm({
     schema: LoginSchema,
@@ -41,14 +44,31 @@ export default function LoginForm() {
     },
   });
 
+  // hydrate persisted store after on mount
+  useEffect(() => {
+    useAppStore.persist.rehydrate();
+  }, []);
+
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError("");
     setSuccess("");
 
     startTransition(async () => {
+      console.log("start login transition");
       const { error, success } = await login(values);
-      setError(error);
-      setSuccess(success);
+
+      console.log("after login action success error", success, error);
+      if (success?.message && success?.user) {
+        const userLogged = success.user;
+        setSuccess(success.message);
+        console.log("Call loginStore with user", JSON.stringify(userLogged));
+        loginStore(userLogged);
+        router.push(DEFAULT_LOGIN_REDIRECT);
+      }
+
+      if (error) {
+        setError(error);
+      }
     });
   };
 

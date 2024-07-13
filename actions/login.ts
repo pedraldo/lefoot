@@ -1,10 +1,7 @@
 "use server";
 
 import { signIn } from "@/auth";
-import { sendVerificationEmail } from "@/lib/mail";
-import { generateVerificationToken } from "@/lib/tokens";
-import { getUserByEmail } from "@/queries/user";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { getUserForLoginByEmail } from "@/queries/user";
 import { LoginSchema } from "@/schemas";
 import { AuthError } from "next-auth";
 import { z } from "zod";
@@ -18,9 +15,9 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 
   const { email, password } = validatedFields.data;
 
-  const existingUser = await getUserByEmail(email);
-  if (!existingUser || !existingUser.email || !existingUser.password) {
-    return { error: "Email does not exist!" };
+  const existingUser = await getUserForLoginByEmail(email);
+  if (!existingUser || !existingUser.id) {
+    return { error: "Email inconnu !" };
   }
 
   // if (!existingUser.emailVerified) {
@@ -33,25 +30,33 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   //   );
   //   return { success: "Confirmation email sent!" };
   // }
-
   try {
+    console.log("try sign in with", email, password);
     await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirect: false,
     });
+
+    console.log("success", JSON.stringify(existingUser));
+    return {
+      success: {
+        message: "Connexion réussie",
+        user: existingUser,
+      },
+    };
   } catch (error) {
+    console.log("error", JSON.stringify(error));
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return { error: "Invalid credentials!" };
+          return { error: "Identifiants invalides" };
         case "AccessDenied":
-          return { error: "Access denied. Email may not be verified!" };
+          return { error: "Accès refusés. L'email n'a pas dû être vérifié." };
         default:
-          return { error: "Something went wrong!" };
+          return { error: "Erreur de connexion" };
       }
     }
     throw error;
   }
-  return { success: "Email sent!" };
 };

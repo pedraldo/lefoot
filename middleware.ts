@@ -15,18 +15,26 @@ export default auth((req) => {
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
+  console.log("midleware req auth", req?.auth);
+  console.log("midleware isLoggedIn", isLoggedIn);
+  console.log("midleware isApiAuthRoute", isApiAuthRoute);
+  console.log("midleware isPublicRoute", isPublicRoute);
+  console.log("midleware isAuthRoute", isAuthRoute);
+
   if (isApiAuthRoute) {
     return;
   }
 
   if (isAuthRoute) {
     if (isLoggedIn) {
+      console.log("Response redirect /");
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
     return;
   }
 
   if (!isLoggedIn && !isPublicRoute) {
+    console.log("Response redirect /auth/login");
     return Response.redirect(new URL("/auth/login", nextUrl));
   }
 

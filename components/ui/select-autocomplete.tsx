@@ -19,7 +19,7 @@ export const SelectAutocomplete = ({
 }) => {
   return (
     <Command>
-      <CommandInput placeholder="Tapez pour rechercher ..." />
+      <CommandInput placeholder="Taper pour rechercher ..." />
       <CommandList>
         <CommandEmpty>Aucun résultat.</CommandEmpty>
         {groups.map((group, indexGroup) => (

@@ -1,11 +1,12 @@
 "use client";
 
-import { User } from "@prisma/client";
+import { UserWithSquadsIds } from "@/queries/user";
+import { useAppStore } from "@/store/store-bis";
 import { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
-import TeamCard from "../team-card";
+import TeamCard from "../team/team-card";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { DataTable } from "../ui/data-table";
@@ -35,17 +36,21 @@ const formSchema = z.object({
   awayScore: z.coerce.number().min(0),
 });
 
-export type FixtureFormValues = z.infer<typeof formSchema>;
+type FixtureFormValues = z.infer<typeof formSchema>;
+export type FixtureCreateValues = FixtureFormValues & { squadId: string };
 
 type FixtureFormProps = {
-  users: User[];
-  onSubmit: (values: FixtureFormValues) => Promise<string>;
+  users: UserWithSquadsIds[];
+  onSubmit: (values: FixtureCreateValues) => Promise<string>;
 };
 
 export const FixtureForm = ({ users, onSubmit }: FixtureFormProps) => {
-  const [homeUsers, setHomeUsers] = useState<User[]>([]);
-  const [awayUsers, setAwayUsers] = useState<User[]>([]);
-  const [tableUsers, setTableUsers] = useState<User[]>(users);
+  const [homeUsers, setHomeUsers] = useState<UserWithSquadsIds[]>([]);
+  const [awayUsers, setAwayUsers] = useState<UserWithSquadsIds[]>([]);
+  const [tableUsers, setTableUsers] = useState<UserWithSquadsIds[]>(users);
+  const user = useAppStore((state) => state.user);
+  const squadId = user?.targetedSquad?.id;
+
   const router = useRouter();
   const { toast } = useToast();
 
@@ -60,7 +65,12 @@ export const FixtureForm = ({ users, onSubmit }: FixtureFormProps) => {
     },
   });
 
-  const addHomeUser = (user: User) => {
+  // hydrate persisted store after on mount
+  useEffect(() => {
+    useAppStore.persist.rehydrate();
+  }, []);
+
+  const addHomeUser = (user: UserWithSquadsIds) => {
     setHomeUsers([...homeUsers, user]);
     setTableUsers(tableUsers.filter((u) => u.id !== user.id));
     form.setValue("homeUserIds", [...form.getValues("homeUserIds"), user.id], {
@@ -69,7 +79,7 @@ export const FixtureForm = ({ users, onSubmit }: FixtureFormProps) => {
     });
   };
 
-  const addAwayUser = (user: User) => {
+  const addAwayUser = (user: UserWithSquadsIds) => {
     setAwayUsers([...awayUsers, user]);
     setTableUsers(tableUsers.filter((u) => u.id !== user.id));
     form.setValue("awayUserIds", [...form.getValues("awayUserIds"), user.id], {
@@ -78,7 +88,7 @@ export const FixtureForm = ({ users, onSubmit }: FixtureFormProps) => {
     });
   };
 
-  const removeHomeUser = (user: User) => {
+  const removeHomeUser = (user: UserWithSquadsIds) => {
     setHomeUsers(homeUsers.filter((u) => u.id !== user.id));
     setTableUsers([...tableUsers, user]);
     form.setValue(
@@ -91,7 +101,7 @@ export const FixtureForm = ({ users, onSubmit }: FixtureFormProps) => {
     );
   };
 
-  const removeAwayUser = (user: User) => {
+  const removeAwayUser = (user: UserWithSquadsIds) => {
     setAwayUsers(awayUsers.filter((u) => u.id !== user.id));
     setTableUsers([...tableUsers, user]);
     form.setValue(
@@ -107,7 +117,7 @@ export const FixtureForm = ({ users, onSubmit }: FixtureFormProps) => {
   const columns: ColumnDef<DataTableRow>[] = [
     {
       accessorKey: "username",
-      header: "Joueur",
+      header: "Joueur·euse",
     },
     {
       accessorKey: "id",
@@ -154,12 +164,23 @@ export const FixtureForm = ({ users, onSubmit }: FixtureFormProps) => {
     <Form
       form={form}
       onSubmit={async (values) => {
-        await onSubmit(values);
-        toast({
-          title: "Le match a bien été créé",
-        });
-        router.push(`/fixtures`);
-        router.refresh();
+        if (!squadId) {
+          toast({
+            title:
+              "Erreur de récupération des données de l'équipe : impossible de créer le match",
+            variant: "destructive",
+          });
+        } else {
+          await onSubmit({ ...values, squadId });
+          toast({
+            title: "Le match a bien été créé",
+          });
+
+          if (squadId) {
+            router.push(`/squads/${squadId}/fixtures`);
+          }
+          router.refresh();
+        }
       }}
     >
       <div className="space-y-8">

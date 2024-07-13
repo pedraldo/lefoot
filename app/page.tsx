@@ -1,11 +1,5 @@
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
+import AppInitializer from "../components/app-initializer";
 
-export default async function Home() {
-  const session = await auth();
-
-  if (!!session?.user) {
-    redirect("/fixtures");
-  }
-  redirect("/auth/login");
+export default function Home() {
+  return <AppInitializer />;
 }

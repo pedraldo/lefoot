@@ -10,8 +10,8 @@ export const sendVerificationEmail = async (email: string, token: string) => {
   await resend.emails.send({
     from: emailFrom,
     to: email,
-    subject: "Confirmez votre email",
-    html: `<p>Cliquez <a href="${confirmLink}">ici</a> pour confirmer votre email.</p>`,
+    subject: "Confirme ton email",
+    html: `<p>Clique <a href="${confirmLink}">ici</a> pour confirmer ton email.</p>`,
   });
 };
 
@@ -23,6 +23,6 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
     from: emailFrom,
     to: email,
     subject: "Mise à jour de votre mot de passe",
-    html: `<p>Cliquez <a href="${resetLink}">ici</a> pour mettre à jour votre mot de passe.</p>`,
+    html: `<p>Clique <a href="${resetLink}">ici</a> pour mettre à jour votre mot de passe.</p>`,
   });
 };
