@@ -11,11 +11,7 @@ const Footer = () => {
           label="Matchs"
           Icon={<RiFootballLine />}
         />
-        <NavLink
-          hrefSuffix="players"
-          label="Joueur·euse·s"
-          Icon={<RiTeamLine />}
-        />
+        <NavLink hrefSuffix="players" label="Effectif" Icon={<RiTeamLine />} />
       </div>
     </footer>
   );

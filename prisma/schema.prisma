@@ -73,7 +73,7 @@ model User {
   guestSquads     Squad[]   @relation("UserGuestSquad")
   createdSquads   Squad[]   @relation("SquadCreator")
   targetedSquadId String?
-  targetedSquad   Squad?    @relation("UserTargetSquad", fields: [targetedSquadId], references: [id], onDelete: NoAction)
+  targetedSquad   Squad?    @relation("UserTargetSquad", fields: [targetedSquadId], references: [id], onDelete: SetNull)
 }
 
 model Team {
@@ -99,8 +99,8 @@ model Fixture {
   homeTeamId String   @unique
   awayTeamId String   @unique
 
-  homeTeam Team @relation("HomeTeamFixture", fields: [homeTeamId], references: [id], onDelete: Cascade)
-  awayTeam Team @relation("AwayTeamFixutre", fields: [awayTeamId], references: [id], onDelete: Cascade)
+  homeTeam Team @relation("HomeTeamFixture", fields: [homeTeamId], references: [id], onDelete: SetDefault)
+  awayTeam Team @relation("AwayTeamFixutre", fields: [awayTeamId], references: [id], onDelete: SetDefault)
 
   squadId String
   squad   Squad  @relation(fields: [squadId], references: [id], onDelete: Cascade)
@@ -119,5 +119,5 @@ model Squad {
   teams         Team[]
 
   creatorId String
-  creator   User   @relation("SquadCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  creator   User   @relation("SquadCreator", fields: [creatorId], references: [id], onDelete: SetDefault)
 }

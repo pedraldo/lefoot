@@ -106,42 +106,44 @@ const UserSettingsForm = () => {
   };
 
   return (
-    <Form form={form} onSubmit={onSubmit} className="space-y-6">
-      <div className="space-y-4">
-        <div className="flex gap-4 items-center max-sm:flex-col">
-          <FormField
-            control={form.control}
-            name="firstname"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Prénom</FormLabel>
-                <FormControl>
-                  <Input {...field} disabled={isPending} placeholder="John" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastname"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nom</FormLabel>
-                <FormControl>
-                  <Input {...field} disabled={isPending} placeholder="Doe" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Surnom</FormLabel>
+    <Form form={form} onSubmit={onSubmit} className="space-y-2">
+      <FormField
+        control={form.control}
+        name="firstname"
+        render={({ field }) => (
+          <FormItem>
+            <div className="grid gap-x-4 gap-y-1 grid-rows-[1fr_auto] grid-cols-[80px_1fr]">
+              <FormLabel className="self-center">Prénom</FormLabel>
+              <FormControl>
+                <Input {...field} disabled={isPending} placeholder="John" />
+              </FormControl>
+              <FormMessage className="row-start-2 col-start-2 mb-2" />
+            </div>
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="lastname"
+        render={({ field }) => (
+          <FormItem>
+            <div className="grid gap-x-4 gap-y-1 grid-rows-[1fr_auto] grid-cols-[80px_1fr]">
+              <FormLabel className="self-center">Nom</FormLabel>
+              <FormControl>
+                <Input {...field} disabled={isPending} placeholder="Doe" />
+              </FormControl>
+              <FormMessage className="row-start-2 col-start-2 mb-2" />
+            </div>
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="username"
+        render={({ field }) => (
+          <FormItem>
+            <div className="grid gap-x-4 gap-y-1 grid-rows-[1fr_auto] grid-cols-[80px_1fr]">
+              <FormLabel className="self-center">Surnom</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -149,20 +151,24 @@ const UserSettingsForm = () => {
                   placeholder="Le nouveau Pelé"
                 />
               </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+              <FormMessage className="row-start-2 col-start-2 mb-2" />
+            </div>
+          </FormItem>
+        )}
+      />
+      <div>
+        <div className="mt-4 space-y-1">
+          <FormError message={error} />
+          <FormSuccess message={success} />
+          <Button
+            type="submit"
+            className="w-full mt-4"
+            disabled={isPending || !isDirty || !isValid}
+          >
+            {isPending ? "Chargement ..." : "Mettre à jour mes infos"}
+          </Button>
+        </div>
       </div>
-      <FormError message={error} />
-      <FormSuccess message={success} />
-      <Button
-        type="submit"
-        className="w-full"
-        disabled={isPending || !isDirty || !isValid}
-      >
-        {isPending ? "Chargement ..." : "Mettre à jour mes infos"}
-      </Button>
     </Form>
   );
 };
