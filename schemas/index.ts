@@ -67,3 +67,15 @@ export const NewPasswordSchema = z
     message: "Mots de passe différents",
     path: ["confirm"],
   });
+
+export const SettingsSchema = z.object({
+  firstname: z.string().min(1, {
+    message: "Entre un prénom",
+  }),
+  lastname: z.string().min(1, {
+    message: "Entre un nom",
+  }),
+  username: z.string().min(1, {
+    message: "Entre un nom",
+  }),
+});

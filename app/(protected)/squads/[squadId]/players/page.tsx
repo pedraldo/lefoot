@@ -41,31 +41,10 @@ const PlayersPage = async ({ params }: { params: { squadId: string } }) => {
           <DropdownMenuContent>
             <DropdownMenuItem>
               <UserPlayerDropdownAction
-                hrefSuffix="add"
-                label="Ajouter un·e
-                joueur·euse"
-                Icon={<RiUserAddLine />}
-              />
-              {/* <Link
-                href="/players/add"
-                className="w-full flex items-center gap-2"
-              >
-                <RiUserAddLine className="mr-2 h-5 w-5" /> Ajouter un·e
-                joueur·euse
-              </Link> */}
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <UserPlayerDropdownAction
                 hrefSuffix="invite"
                 label="Créer un·e invité·e"
                 Icon={<RiUserAddLine />}
               />
-              {/* <Link
-                href="/players/invite"
-                className="w-full flex items-center gap-2"
-              >
-                <RiUserAddLine className="mr-2 h-5 w-5" /> Créer un·e invité·e
-              </Link> */}
             </DropdownMenuItem>
             {isOneGuestUser && (
               <DropdownMenuItem>
@@ -75,13 +54,6 @@ const PlayersPage = async ({ params }: { params: { squadId: string } }) => {
                   un·e invité·e"
                   Icon={<RiShieldUserLine />}
                 />
-                {/* <Link
-                  href="/players/link"
-                  className="w-full flex items-center gap-2"
-                >
-                  <RiShieldUserLine className="mr-2 h-5 w-5" /> Lier un compte à
-                  un·e invité·e
-                </Link> */}
               </DropdownMenuItem>
             )}
           </DropdownMenuContent>

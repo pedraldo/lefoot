@@ -5,6 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 import { RiLogoutBoxRLine, RiSettings5Line, RiUser3Line } from "react-icons/ri";
 import LogoutButton from "../auth/logout-button";
 import { Button } from "../ui/button";
@@ -20,7 +21,7 @@ const UserDropdownMenu = () => {
       <DropdownMenuContent>
         <DropdownMenuItem>
           <RiSettings5Line className="mr-2 h-4 w-4" />
-          <span>Paramètres</span>
+          <Link href="/settings">Mes infos</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
           <RiLogoutBoxRLine className="mr-2 h-4 w-4" />
