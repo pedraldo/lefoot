@@ -1,12 +1,12 @@
 "use server";
 
-import { InviteUserValues } from "@/components/user/invite-form";
+import { CreateGuestValues } from "@/components/user/create-guest-form";
 import { prisma } from "@/lib/db";
-import { InviteUserSchema } from "@/schemas";
+import { CreateGuestSchema } from "@/schemas";
 
-export const inviteUser = async (values: InviteUserValues) => {
+export const createGuest = async (values: CreateGuestValues) => {
   const { squadId, ...schemaValues } = values;
-  const validatedFields = InviteUserSchema.safeParse(values);
+  const validatedFields = CreateGuestSchema.safeParse(values);
 
   if (!validatedFields.success) {
     return { error: "Champ(s) invalide(s)!" };

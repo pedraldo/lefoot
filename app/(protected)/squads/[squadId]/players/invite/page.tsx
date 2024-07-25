@@ -1,11 +1,11 @@
-import InviteForm from "@/components/user/invite-form";
+import CreateGuestForm from "@/components/user/create-guest-form";
 
-const InvitePlayerPage = () => {
+const CreateGuestPage = () => {
   return (
     <div className="w-full h-full flex justify-center items-center">
-      <InviteForm />
+      <CreateGuestForm />
     </div>
   );
 };
 
-export default InvitePlayerPage;
+export default CreateGuestPage;

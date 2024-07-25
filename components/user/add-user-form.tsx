@@ -48,29 +48,30 @@ const AddUserForm = () => {
     if (!squadId) {
       toast({
         variant: "destructive",
-        title: "Erreur lors de la récupération des données de l'equipe : impossible d'ajouter un·e joueur·euse", 
+        title:
+          "Erreur lors de la récupération des données de l'equipe : impossible d'ajouter un·e joueur·euse",
       });
     } else {
       setError("");
       setSuccess("");
-  
+
       startTransition(async () => {
         const { error, success } = await addUser({ ...values, squadId });
         setError(error);
         setSuccess(success);
-  
+
         if (error) {
           toast({
             variant: "destructive",
             title: error,
           });
         }
-  
+
         if (success) {
           toast({
             title: success,
           });
-  
+
           if (user) {
             router.push(`/squads/${squadId}/players`);
           }
@@ -106,7 +107,7 @@ const AddUserForm = () => {
         <FormError message={error} />
         <FormSuccess message={success} />
         <Button type="submit" className="w-full" disabled={isPending}>
-          Créer un compte
+          Ajouter
         </Button>
       </Form>
     </CardWrapper>

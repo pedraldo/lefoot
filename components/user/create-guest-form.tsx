@@ -1,7 +1,7 @@
 "use client";
 
-import { inviteUser } from "@/actions/invite-user";
-import { InviteUserSchema } from "@/schemas";
+import { createGuest } from "@/actions/create-guest";
+import { CreateGuestSchema } from "@/schemas";
 import { useAppStore } from "@/store/store-bis";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
@@ -22,11 +22,11 @@ import {
 import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
 
-export type InviteUserValues = z.infer<typeof InviteUserSchema> & {
+export type CreateGuestValues = z.infer<typeof CreateGuestSchema> & {
   squadId: string;
 };
 
-const InviteForm = () => {
+const CreateGuestForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -38,7 +38,7 @@ const InviteForm = () => {
   }, []);
 
   const form = useZodForm({
-    schema: InviteUserSchema,
+    schema: CreateGuestSchema,
     defaultValues: {
       firstname: "",
       lastname: "",
@@ -58,12 +58,12 @@ const InviteForm = () => {
     );
   }
 
-  const onSubmit = (values: z.infer<typeof InviteUserSchema>) => {
+  const onSubmit = (values: z.infer<typeof CreateGuestSchema>) => {
     setError("");
     setSuccess("");
 
     startTransition(async () => {
-      const { error, success } = await inviteUser({ ...values, squadId });
+      const { error, success } = await createGuest({ ...values, squadId });
       setError(error);
       setSuccess(success);
 
@@ -128,4 +128,4 @@ const InviteForm = () => {
   );
 };
 
-export default InviteForm;
+export default CreateGuestForm;

@@ -24,7 +24,7 @@ export const RegisterSchema = z.object({
   }),
 });
 
-export const InviteUserSchema = z.object({
+export const CreateGuestSchema = z.object({
   firstname: z.string().min(1, {
     message: "Entre un prénom",
   }),

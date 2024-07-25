@@ -41,6 +41,13 @@ const PlayersPage = async ({ params }: { params: { squadId: string } }) => {
           <DropdownMenuContent>
             <DropdownMenuItem>
               <UserPlayerDropdownAction
+                hrefSuffix="add"
+                label="Ajouter un·e joueur·euse"
+                Icon={<RiUserAddLine />}
+              />
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <UserPlayerDropdownAction
                 hrefSuffix="invite"
                 label="Créer un·e invité·e"
                 Icon={<RiUserAddLine />}
