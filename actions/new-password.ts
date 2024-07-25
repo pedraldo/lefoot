@@ -12,7 +12,7 @@ export const newPassword = async (
   token?: string | null
 ) => {
   if (!token) {
-    return { error: "Missing token !" };
+    return { error: "Token manquant !" };
   }
   const validatedFields = NewPasswordSchema.safeParse(values);
 
@@ -22,7 +22,7 @@ export const newPassword = async (
 
   const { password, confirm } = validatedFields.data;
   if (password !== confirm) {
-    return { error: "Passwords don't match!" };
+    return { error: "Les mots de passe ne sont pas identiques !" };
   }
 
   const existingToken = await getPasswordResetTokenByToken(token);
@@ -32,7 +32,7 @@ export const newPassword = async (
 
   const hasExpired = new Date(existingToken.expires) < new Date();
   if (hasExpired) {
-    return { error: "Token has expired !" };
+    return { error: "Token expiré !" };
   }
 
   const existingUser = await getUserByEmail(existingToken.email);
@@ -58,5 +58,5 @@ export const newPassword = async (
     },
   });
 
-  return { success: "Password updated!" };
+  return { success: "Mot de passe mis à jour" };
 };

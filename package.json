@@ -12,7 +12,8 @@
     "prisma:migrate": "dotenv -e .env.development -e .env -- npx prisma migrate dev",
     "prisma:reset": "dotenv -e .env.development -e .env -- npx prisma migrate reset",
     "prisma:deploy": "dotenv -e .env.deploy -e .env -- npx prisma migrate deploy",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "email": "email dev"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^1.5.0",
@@ -29,6 +30,8 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
+    "@react-email/components": "0.0.22",
+    "@react-email/tailwind": "0.0.19",
     "@sentry/nextjs": "^8.9.2",
     "@tanstack/react-table": "^8.17.3",
     "bcryptjs": "^2.4.3",
@@ -43,6 +46,7 @@
     "react": "^18",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",
+    "react-email": "2.1.6",
     "react-hook-form": "^7.51.5",
     "react-icons": "^5.0.1",
     "react-spinners": "^0.13.8",
