@@ -26,7 +26,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
     from: emailFrom,
     to: email,
 
-    subject: "Le Foot -Mise à jour de ton mot de passe",
+    subject: "Le Foot - Mise à jour de ton mot de passe",
     react: ResetPasswordEmail({ resetPasswordLink: resetLink }),
   });
 };

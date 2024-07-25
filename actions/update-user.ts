@@ -35,6 +35,6 @@ export const updateUser = async (values: UpdateUserValues) => {
   });
 
   return {
-    success: `Tes informations ont bien été mis à jour !`,
+    success: `Tes informations ont bien été mises à jour !`,
   };
 };

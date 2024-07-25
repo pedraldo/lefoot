@@ -19,32 +19,60 @@ export const linkGuest = async (values: LinkGuestValues) => {
   const existingUser = await getUserByEmail(email);
 
   if (existingUser) {
+    console.log("/! Link guest to existing user /! ");
+    console.log("Existing user id :", existingUser.id);
+    console.log("Guest id :", guestId);
+    console.log("Squad id :", squadId);
+
     try {
       // Replace guestId by existingUser.id in "_TeamToUser"
       // Target teams related to squadId
       console.log(
-        "Link guest to existing user.\nTry to update teamToUser relation replacing guest id by existing user id ..."
+        "Try to update teamToUser relation replacing guest id by existing user id ..."
+      );
+      console.log(
+        "First : check if guest is associated to at least one team ..."
       );
 
-      const nbRowsAffected = await prisma.$executeRaw`
-        update "_TeamToUser" as teamtouser
-        set "B" = ${existingUser.id}
-        from "Team" team
-        where team.id = teamtouser."A"
-        and team."squadId" = ${squadId}
-        and teamtouser."B" = ${guestId}
-      `;
+      const teams = await prisma.team.findMany({
+        where: {
+          users: {
+            some: {
+              id: guestId,
+            },
+          },
+        },
+        select: {
+          id: true,
+        },
+      });
 
-      if (nbRowsAffected < 1) {
-        console.error(
-          "Error while updating teamToUser relation : nb rows affected < 1"
-        );
-        return {
-          error: `Erreur lors de la tentative de remplacement du compte invité par le compte de l'email ${email}.`,
-        };
+      if (teams.length > 0) {
+        const nbRowsAffected = await prisma.$executeRaw`
+          update "_TeamToUser" as teamtouser
+          set "B" = ${existingUser.id}
+          from "Team" team
+          where team.id = teamtouser."A"
+          and team."squadId" = ${squadId}
+          and teamtouser."B" = ${guestId}
+        `;
+
+        if (nbRowsAffected < 1) {
+          console.error(
+            "Error while updating teamToUser relation : nb rows affected < 1 : ",
+            nbRowsAffected
+          );
+          return {
+            error: `Erreur lors de la tentative de remplacement du compte invité par le compte de l'email ${email}.`,
+          };
+        } else {
+          console.log(
+            `Replace guest id by existing user id : OK ==> ${nbRowsAffected} rows affected.`
+          );
+        }
       } else {
         console.log(
-          `Replace guest id by existing user id : OK ==> ${nbRowsAffected} rows affected.`
+          "Guest is not associated to any team : no need to update any _TeamToUser relation"
         );
       }
     } catch (error) {
@@ -101,7 +129,7 @@ export const linkGuest = async (values: LinkGuestValues) => {
         JSON.stringify(error)
       );
       return {
-        error: `Erreur de la suppresion de l'utilisateir invité de la base de données.`,
+        error: `Erreur de la suppresion de l'utilisateur invité de la base de données.`,
       };
     }
 
