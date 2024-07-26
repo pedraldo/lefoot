@@ -188,21 +188,25 @@ export const FixtureForm = ({ users, onSubmit }: FixtureFormProps) => {
           control={form.control}
           name="matchDate"
           render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Date du match</FormLabel>
-              <FormControl>
+            <FormItem className="space-y-0">
+              <FormLabel className="inline-block mr-2 mb-2">
+                Date du match
+              </FormLabel>
+              <FormControl className="inline-block">
                 <DatePicker field={field} />
               </FormControl>
-              {/* <FormDescription>
-                This is your public display name.
-              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
         />
         <div>
-          <div className="text-sm font-medium mb-4">
-            Composition des équipes (au moins 4 joueur·euse·s)
+          <div className="text-sm mb-4">
+            <span className="inline-block font-medium mr-1">
+              Composition des équipes
+            </span>
+            <span className="inline-block font-light">
+              (au moins 4 joueur·euse·s)
+            </span>
           </div>
           <DataTable columns={columns} data={tableUsers} />
         </div>

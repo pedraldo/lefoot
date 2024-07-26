@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
-import { RiAddFill } from "react-icons/ri";
-import { useAppStore } from "@/store/store-bis";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { useAppStore } from "@/store/store-bis";
+import Link from "next/link";
 import { useEffect } from "react";
+import { RiAddFill } from "react-icons/ri";
 
 const CreateFixtureButton = () => {
   const user = useAppStore((state) => state.user);
@@ -18,7 +18,7 @@ const CreateFixtureButton = () => {
   if (!user || !squadId) {
     return (
       <Button variant={"default"} disabled>
-        <RiAddFill className="mr-2 h-4 w-4" /> Créer un match
+        <RiAddFill className="mr-2 h-5 w-5" /> Créer
       </Button>
     );
   }
@@ -28,7 +28,7 @@ const CreateFixtureButton = () => {
       href={`/squads/${squadId}/fixtures/create`}
       className={buttonVariants({ variant: "default" })}
     >
-      <RiAddFill className="mr-2 h-4 w-4" /> Créer un match
+      <RiAddFill className="mr-2 h-5 w-5" /> Créer
     </Link>
   );
 };

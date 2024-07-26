@@ -1,3 +1,4 @@
+import SquadTitle from "@/components/squad/squad-title";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import {
@@ -33,7 +34,8 @@ const PlayersPage = async ({ params }: { params: { squadId: string } }) => {
 
   return (
     <div className="w-full flex flex-col gap-4">
-      <div className="w-full flex justify-end gap-4">
+      <div className="w-full flex justify-between items-end gap-4 pb-4">
+        <SquadTitle subtitle={`${playersUsers.length} joueur·euse·s`} />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button>Actions</Button>

@@ -1,6 +1,7 @@
-import FixtureCard from "@/components/fixture/fixture-card";
-import { getSquadFixtures } from "@/queries/squad";
 import CreateFixtureButton from "@/components/fixture/create-fixture-button";
+import FixtureCard from "@/components/fixture/fixture-card";
+import SquadTitle from "@/components/squad/squad-title";
+import { getSquadFixtures } from "@/queries/squad";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +15,8 @@ export default async function FixturesPage({
 
   return (
     <>
-      <div className="w-full text-right">
+      <div className="w-full flex justify-between items-end pb-4">
+        <SquadTitle subtitle={`${fixtures?.length} matchs joués`} />
         <CreateFixtureButton />
       </div>
       <div className="flex flex-col gap-4 mt-4">

@@ -18,7 +18,7 @@ export const createGuest = async (values: CreateGuestValues) => {
     data: {
       firstname,
       lastname,
-      username: `${firstname} ${lastname}`,
+      username: `${firstname} ${lastname[0]}.`,
       squads: {
         connect: [{ id: values.squadId }],
       },

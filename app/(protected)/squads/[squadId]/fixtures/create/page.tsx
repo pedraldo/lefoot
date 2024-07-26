@@ -20,7 +20,12 @@ const FixtureCreatePage = async ({
     );
   }
 
-  return <FixtureForm users={users} onSubmit={createFixture} />;
+  return (
+    <>
+      <h1 className="text-3xl font-bold mb-8">Créer un match</h1>
+      <FixtureForm users={users} onSubmit={createFixture} />
+    </>
+  );
 };
 
 export default FixtureCreatePage;
