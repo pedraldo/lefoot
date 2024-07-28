@@ -5,6 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { logger } from "@/lib/logger";
 import Link from "next/link";
 import { RiLogoutBoxRLine, RiSettings5Line, RiUser3Line } from "react-icons/ri";
 import LogoutButton from "../auth/logout-button";
@@ -28,7 +29,9 @@ const UserDropdownMenu = () => {
           <form
             action={async () => {
               "use server";
+              logger.info(`sign out`);
               await signOut({ redirectTo: "/auth/login" });
+              logger.info(`sign out - success`);
             }}
           >
             <LogoutButton />

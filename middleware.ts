@@ -6,6 +6,7 @@ import {
   publicRoutes,
 } from "@/routes";
 import NextAuth from "next-auth";
+import { logger } from "./lib/logger";
 export const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
@@ -15,11 +16,7 @@ export default auth((req) => {
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-  console.log("midleware req auth", req?.auth);
-  console.log("midleware isLoggedIn", isLoggedIn);
-  console.log("midleware isApiAuthRoute", isApiAuthRoute);
-  console.log("midleware isPublicRoute", isPublicRoute);
-  console.log("midleware isAuthRoute", isAuthRoute);
+  logger.info(`midleware - is logged in ( ${isLoggedIn} )`);
 
   if (isApiAuthRoute) {
     return;
@@ -27,14 +24,14 @@ export default auth((req) => {
 
   if (isAuthRoute) {
     if (isLoggedIn) {
-      console.log("Response redirect /");
+      logger.info("middleware - redirect /");
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
     return;
   }
 
   if (!isLoggedIn && !isPublicRoute) {
-    console.log("Response redirect /auth/login");
+    logger.info("middleware - redirect /auth/login");
     return Response.redirect(new URL("/auth/login", nextUrl));
   }
 

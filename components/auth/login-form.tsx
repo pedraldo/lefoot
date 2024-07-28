@@ -54,14 +54,11 @@ export default function LoginForm() {
     setSuccess("");
 
     startTransition(async () => {
-      console.log("start login transition");
       const { error, success } = await login(values);
 
-      console.log("after login action success error", success, error);
       if (success?.message && success?.user) {
         const userLogged = success.user;
         setSuccess(success.message);
-        console.log("Call loginStore with user", JSON.stringify(userLogged));
         loginStore(userLogged);
         router.push(DEFAULT_LOGIN_REDIRECT);
       }

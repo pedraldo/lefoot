@@ -1,6 +1,7 @@
 "use server";
 
 import { signIn } from "@/auth";
+import { logger } from "@/lib/logger";
 import { getUserForLoginByEmail } from "@/queries/user";
 import { LoginSchema } from "@/schemas";
 import { AuthError } from "next-auth";
@@ -8,15 +9,19 @@ import { z } from "zod";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validatedFields = LoginSchema.safeParse(values);
+  logger.info(`login - email ${values.email}`);
 
   if (!validatedFields.success) {
+    logger.error(`login - invalid fields`);
     return { error: "Champ(s) invalide(s) !" };
   }
 
+  logger.info(`login - valid fields`);
   const { email, password } = validatedFields.data;
 
   const existingUser = await getUserForLoginByEmail(email);
   if (!existingUser || !existingUser.id) {
+    logger.error(`login - unregistered email`);
     return { error: "Email inconnu !" };
   }
 
@@ -31,14 +36,14 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   //   return { success: "Confirmation email sent!" };
   // }
   try {
-    console.log("try sign in with", email, password);
+    logger.info("login - try sign in for email ", email);
     await signIn("credentials", {
       email,
       password,
       redirect: false,
     });
 
-    console.log("success", JSON.stringify(existingUser));
+    logger.info("login - success", JSON.stringify(existingUser));
     return {
       success: {
         message: "Connexion réussie",
@@ -46,7 +51,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       },
     };
   } catch (error) {
-    console.log("error", JSON.stringify(error));
+    logger.error("login - error : ", JSON.stringify(error));
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":

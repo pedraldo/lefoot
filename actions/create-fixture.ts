@@ -2,8 +2,10 @@
 
 import { FixtureCreateValues } from "@/components/fixture/fixture-form";
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 
 export const createFixture = async (values: FixtureCreateValues) => {
+  logger.info(`create fixture - squadId ( ${values.squadId} )`)
   const fixture = await prisma.fixture.create({
     data: {
       squad: {
@@ -36,5 +38,7 @@ export const createFixture = async (values: FixtureCreateValues) => {
       },
     },
   });
+  
+  logger.info(`create fixture - fixture id ( ${fixture.id} )`)
   return fixture.id;
 };

@@ -42,7 +42,6 @@ export const getUserForLoginByEmail = async (email: string) => {
     });
     return user;
   } catch (error) {
-    console.error(JSON.stringify(error));
     return null;
   }
 };

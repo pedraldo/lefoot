@@ -3,6 +3,7 @@ import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
+import { logger } from "./lib/logger";
 import { getUserByEmail } from "./queries/user";
 import { LoginSchema } from "./schemas";
 
@@ -21,26 +22,33 @@ export default {
       async authorize(credentials) {
         // Validate LoginSchema here in case someone try to access to the app
         // in a different way than Front application
-        console.log("Credentials authorize start");
+        logger.info("auth config - credentials authorize - start");
         const validateFields = LoginSchema.safeParse(credentials);
 
         if (validateFields.success) {
           const { email, password } = validateFields.data;
-          console.log("Credentials authorize get user by email");
+          logger.info(
+            `auth config - credentials authorize - for user with email xxx`
+          );
           const user = await getUserByEmail(email);
-          console.log("Credentials authorize user", user);
 
           if (!user || !user.password) {
+            logger.warn(
+              `auth config - credentials authorize - user not recognized`
+            );
             return null;
           }
 
+          logger.info("auth config - credentials authorize - user recognized");
           const passwordsMatch = await bcrypt.compare(password, user.password);
           if (passwordsMatch) {
             return user;
           }
-          console.log("Credentials authorize passwords don't match");
+          logger.warn(
+            "auth config - credentials authorize - passwords don't match"
+          );
         }
-        console.log("Credentials authorize final null return");
+        logger.info("Credentials authorize - final null return");
         return null;
       },
     }),

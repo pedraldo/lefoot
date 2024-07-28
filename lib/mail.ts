@@ -1,5 +1,6 @@
 import ResetPasswordEmail from "@/emails/reset";
 import { Resend } from "resend";
+import { logger } from "./logger";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const domain = process.env.NEXT_PUBLIC_APP_URL;
@@ -17,8 +18,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
 };
 
 export const sendPasswordResetEmail = async (email: string, token: string) => {
-  console.log("Verification email sent for email : " + email);
-  console.log("Reset link domain : " + domain);
+  logger.info("mail - verification email for email : " + email);
   const resetLink = `${domain}/auth/new-password?token=${token}`;
   const emailFrom = process.env.RESEND_EMAIL_FROM!;
 
@@ -29,4 +29,5 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
     subject: "Le Foot - Mise à jour de ton mot de passe",
     react: ResetPasswordEmail({ resetPasswordLink: resetLink }),
   });
+  logger.info(`mail - mail sent`)
 };

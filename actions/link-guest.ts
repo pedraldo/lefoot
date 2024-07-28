@@ -2,6 +2,7 @@
 
 import { LinkGuestValues } from "@/components/user/link-guest-form";
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 import { sendPasswordResetEmail } from "@/lib/mail";
 import { generatePasswordResetToken } from "@/lib/tokens";
 import { getUserByEmail } from "@/queries/user";
@@ -10,8 +11,12 @@ import { LinkGuestSchema } from "@/schemas";
 export const linkGuest = async (values: LinkGuestValues) => {
   const { squadId, ...schemaValues } = values;
   const validatedFields = LinkGuestSchema.safeParse(schemaValues);
+  logger.info(
+    `link guest - squadId ( ${squadId} ) ; guestId ( ${values.guestId} ) ; email ( xxx )`
+  );
 
   if (!validatedFields.success) {
+    logger.error(`link guest - invalid fields`);
     return { error: "Champ(s) invalide(s) !" };
   }
 
@@ -19,19 +24,16 @@ export const linkGuest = async (values: LinkGuestValues) => {
   const existingUser = await getUserByEmail(email);
 
   if (existingUser) {
-    console.log("/! Link guest to existing user /! ");
-    console.log("Existing user id :", existingUser.id);
-    console.log("Guest id :", guestId);
-    console.log("Squad id :", squadId);
+    logger.warn("link guest - existing user");
 
     try {
       // Replace guestId by existingUser.id in "_TeamToUser"
       // Target teams related to squadId
-      console.log(
-        "Try to update teamToUser relation replacing guest id by existing user id ..."
+      logger.info(
+        "link guest - try to update teamToUser relation replacing guest id by existing user id ..."
       );
-      console.log(
-        "First : check if guest is associated to at least one team ..."
+      logger.info(
+        "link guest - first : check if guest is associated to at least one team ..."
       );
 
       const teams = await prisma.team.findMany({
@@ -58,26 +60,26 @@ export const linkGuest = async (values: LinkGuestValues) => {
         `;
 
         if (nbRowsAffected < 1) {
-          console.error(
-            "Error while updating teamToUser relation : nb rows affected < 1 : ",
+          logger.error(
+            "link guest - error while updating teamToUser relation : nb rows affected < 1 : ",
             nbRowsAffected
           );
           return {
             error: `Erreur lors de la tentative de remplacement du compte invité par le compte de l'email ${email}.`,
           };
         } else {
-          console.log(
-            `Replace guest id by existing user id : OK ==> ${nbRowsAffected} rows affected.`
+          logger.info(
+            `link guest - replace guest id by existing user id : OK ==> ${nbRowsAffected} rows affected.`
           );
         }
       } else {
-        console.log(
-          "Guest is not associated to any team : no need to update any _TeamToUser relation"
+        logger.info(
+          "link guest - guest is not associated to any team : no need to update any _TeamToUser relation"
         );
       }
     } catch (error) {
-      console.error(
-        "Error while updating teamToUser relation : ",
+      logger.error(
+        "link guest - error while updating teamToUser relation : ",
         JSON.stringify(error)
       );
       return {
@@ -87,8 +89,8 @@ export const linkGuest = async (values: LinkGuestValues) => {
 
     try {
       // Link existingUser to squad and unlink guest from squad
-      console.log(
-        "Try to link existing user to squad and unlink guest from squad ..."
+      logger.info(
+        "link guest - try to link existing user to squad and unlink guest from squad ..."
       );
       await prisma.squad.update({
         where: {
@@ -101,12 +103,12 @@ export const linkGuest = async (values: LinkGuestValues) => {
           },
         },
       });
-      console.log(
-        "Link existing user to squad and unlink guest from squad : OK"
+      logger.info(
+        "link guest - link existing user to squad and unlink guest from squad : OK"
       );
     } catch (error) {
-      console.error(
-        "Error while connecting existing user and disconnecting guest user to squad : ",
+      logger.error(
+        "link guest - error while connecting existing user and disconnecting guest user to squad : ",
         JSON.stringify(error)
       );
       return {
@@ -116,16 +118,16 @@ export const linkGuest = async (values: LinkGuestValues) => {
 
     try {
       // Remove guest user from database
-      console.log("Try to remove guest user from database ...");
+      logger.info("link guest - try to remove guest user from database ...");
       await prisma.user.delete({
         where: {
           id: guestId,
         },
       });
-      console.log("Remove guest user from database : OK");
+      logger.info("link guest - remove guest user from database : OK");
     } catch (error) {
-      console.error(
-        "Error while deleting guest user from database : ",
+      logger.error(
+        "link guest - error while deleting guest user from database : ",
         JSON.stringify(error)
       );
       return {
@@ -133,7 +135,9 @@ export const linkGuest = async (values: LinkGuestValues) => {
       };
     }
 
-    console.log(`Link guest to existing user with email ${email}: ALL GOOD.`);
+    logger.info(
+      `link guest - link guest to existing user with email ${email} : ALL GOOD.`
+    );
     return {
       success: `Le compte invité a été remplacer par le compte existant avec l'email ${email}.`,
     };
@@ -157,6 +161,7 @@ export const linkGuest = async (values: LinkGuestValues) => {
     passwordResetToken.token
   );
 
+  logger.info(`link guest - password reset email sent to email ( xxx )`);
   return {
     success:
       "Un email de création de mot de passe a été envoyé à l'adresse indiquée !",
