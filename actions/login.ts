@@ -9,7 +9,7 @@ import { z } from "zod";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validatedFields = LoginSchema.safeParse(values);
-  logger.info(`login - email ${values.email}`);
+  logger.info(`login`);
 
   if (!validatedFields.success) {
     logger.error(`login - invalid fields`);
@@ -36,7 +36,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   //   return { success: "Confirmation email sent!" };
   // }
   try {
-    logger.info("login - try sign in for email ", email);
+    logger.info(`login - try sign in for user with id (${existingUser.id})`);
     await signIn("credentials", {
       email,
       password,

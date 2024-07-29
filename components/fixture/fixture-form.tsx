@@ -246,7 +246,6 @@ export const FixtureForm = ({ users, onSubmit }: FixtureFormProps) => {
                             min="0"
                             {...field}
                             className="w-[50px] text-center border border-primary"
-                            value=""
                           />
                         </FormControl>
                       </FormItem>
@@ -264,7 +263,6 @@ export const FixtureForm = ({ users, onSubmit }: FixtureFormProps) => {
                             min="0"
                             {...field}
                             className="w-[50px] text-center border border-destructive"
-                            value=""
                           />
                         </FormControl>
                       </FormItem>
