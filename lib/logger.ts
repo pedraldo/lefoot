@@ -2,7 +2,7 @@ import pino, { Logger } from "pino";
 
 export const logger: Logger =
   process.env["NODE_ENV"] === "production"
-    ? pino({ level: "WARN" })
+    ? pino({ level: "info" })
     : pino({
         transport: {
           target: "pino-pretty",
